@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Name — Portfolio</title>
+<meta name="description" content="Selected projects by Your Name.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --ink: #15171c;
+    --muted: #70757f;
+    --line: #e6e7ea;
+    --accent: #2d4bff;
+    --font: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #101114; --ink: #f1f2f4; --muted: #8b909a; --line: #25272d; --accent: #7d92ff; }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: var(--font); font-weight: 400; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 56px); }
+
+  header { padding: clamp(72px, 16vh, 160px) 0 clamp(56px, 10vh, 112px); }
+  h1 {
+    font-size: clamp(2.6rem, 8vw, 6.5rem); font-weight: 300;
+    line-height: 1; letter-spacing: -0.04em;
+  }
+  .intro { margin-top: 28px; max-width: 34em; color: var(--muted); font-size: 1.15rem; }
+
+  .project { border-top: 1px solid var(--line); }
+  .project:last-child { border-bottom: 1px solid var(--line); }
+  .row {
+    display: grid; grid-template-columns: 5rem 1fr; gap: 8px 24px;
+    padding: clamp(28px, 5vw, 48px) 0; align-items: baseline;
+  }
+  .year { color: var(--muted); font-size: .95rem; font-variant-numeric: tabular-nums; }
+  .title {
+    font-size: clamp(1.8rem, 4.5vw, 3.4rem); font-weight: 500;
+    letter-spacing: -0.03em; line-height: 1.1; transition: color .2s;
+  }
+  .desc { grid-column: 2; max-width: 38em; color: var(--muted); margin-top: 6px; }
+  .tags { grid-column: 2; color: var(--muted); font-size: .9rem; display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 6px; }
+  .links { grid-column: 2; display: flex; gap: 20px; margin-top: 10px; font-size: .95rem; }
+  .links a { border-bottom: 1px solid var(--accent); padding-bottom: 1px; }
+  .links a:hover { color: var(--accent); }
+
+  /* the one memorable moment: hover a project and the rest recede */
+  @media (hover: hover) {
+    .list:hover .project { opacity: .35; transition: opacity .25s; }
+    .list .project:hover { opacity: 1; }
+    .project:hover .title { color: var(--accent); }
+  }
+
+  footer { padding: clamp(64px, 12vh, 120px) 0 64px; }
+  footer p { color: var(--muted); }
+  footer a.big {
+    display: inline-block; margin-top: 8px;
+    font-size: clamp(1.6rem, 4vw, 2.8rem); letter-spacing: -0.03em; font-weight: 500;
+    border-bottom: 2px solid var(--accent);
+  }
+  footer a.big:hover { color: var(--accent); }
+  .elsewhere { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  .elsewhere a { color: var(--muted); }
+  .elsewhere a:hover { color: var(--ink); }
+
+  @media (max-width: 600px) {
+    .row { grid-template-columns: 1fr; }
+    .desc, .tags, .links { grid-column: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1 id="name"></h1>
+    <p class="intro" id="intro"></p>
+  </header>
+
+  <main>
+    <section class="list" id="projects" aria-label="Projects"></section>
+  </main>
+
+  <footer>
+    <p id="contact-label"></p>
+    <a class="big" id="email"></a>
+    <nav class="elsewhere" id="elsewhere"></nav>
+  </footer>
+</div>
+
+<script>
+/* ============================================================
+   EDIT THIS BLOCK ONLY. Everything on the page is generated from it.
+   ============================================================ */
+const SITE = {
+  name: "Your Name",
+  intro: "I build things for the web. Below is a selection of recent work.",
+  contactLabel: "Want to work together?",
+  email: "you@example.com",
+  elsewhere: [
+    { label: "GitHub", url: "https://github.com/your-username" },
+    { label: "LinkedIn", url: "https://linkedin.com/in/your-username" }
+  ]
+};
+
+const PROJECTS = [
+  {
+    title: "Project One",
+    year: "2026",
+    description: "One or two sentences on what it is and what problem it solves.",
+    tags: ["React", "Node", "Postgres"],
+    links: [{ label: "Live", url: "#" }, { label: "Source", url: "#" }]
+  },
+  {
+    title: "Project Two",
+    year: "2025",
+    description: "Placeholder project. Send me the real details and I'll swap this out.",
+    tags: ["Python", "CLI"],
+    links: [{ label: "Source", url: "#" }]
+  },
+  {
+    title: "Project Three",
+    year: "2025",
+    description: "Another placeholder. Add as many projects as you like; the page grows with them.",
+    tags: ["Design", "TypeScript"],
+    links: [{ label: "Live", url: "#" }]
+  }
+];
+/* ============================================================ */
+
+const $ = (id) => document.getElementById(id);
+const el = (tag, cls, text) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text) n.textContent = text;
+  return n;
+};
+
+document.title = SITE.name + " — Portfolio";
+$("name").textContent = SITE.name;
+$("intro").textContent = SITE.intro;
+$("contact-label").textContent = SITE.contactLabel;
+$("email").textContent = SITE.email;
+$("email").href = "mailto:" + SITE.email;
+
+SITE.elsewhere.forEach((l) => {
+  const a = el("a", null, l.label);
+  a.href = l.url; a.target = "_blank"; a.rel = "noopener";
+  $("elsewhere").appendChild(a);
+});
+
+PROJECTS.forEach((p) => {
+  const art = el("article", "project");
+  const row = el("div", "row");
+  row.appendChild(el("span", "year", p.year || ""));
+  row.appendChild(el("h2", "title", p.title));
+  if (p.description) row.appendChild(el("p", "desc", p.description));
+  if (p.tags && p.tags.length) {
+    const t = el("div", "tags");
+    p.tags.forEach((x) => t.appendChild(el("span", null, x)));
+    row.appendChild(t);
+  }
+  if (p.links && p.links.length) {
+    const l = el("div", "links");
+    p.links.forEach((x) => {
+      const a = el("a", null, x.label);
+      a.href = x.url; a.target = "_blank"; a.rel = "noopener";
+      l.appendChild(a);
+    });
+    row.appendChild(l);
+  }
+  art.appendChild(row);
+  $("projects").appendChild(art);
+});
+</script>
+</body>
+</html>
