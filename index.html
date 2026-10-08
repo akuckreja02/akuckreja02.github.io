@@ -61,11 +61,18 @@
   .contact { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: .95rem; }
   .contact a { border-bottom: 1px solid var(--accent); padding-bottom: 1px; }
   .contact a:hover { color: var(--accent); }
-  .lists { margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px 32px; }
+  .lists { margin-top: 28px; display: flex; flex-direction: column; gap: 22px; }
+  .skill-groups { display: grid; grid-template-columns: max-content 1fr; gap: 10px 16px; align-items: baseline; }
+  .skill-groups dt { font-size: .9rem; color: var(--muted); }
   .lists h3 { font-size: .8rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
 
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chips span { font-size: .85rem; padding: 3px 10px; border-radius: 999px; background: var(--soft); color: var(--muted); }
+  .awards { display: flex; flex-wrap: wrap; gap: 6px; }
+  .awards span {
+    font-size: .8rem; font-weight: 500; padding: 3px 10px; border-radius: 999px;
+    color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent);
+  }
 
   /* sections */
   section.block { padding: clamp(40px, 8vh, 72px) 0; border-top: 1px solid var(--line); }
@@ -109,7 +116,7 @@
   .modal-close button:focus-visible { outline: 2px solid var(--accent); }
   #modal-title { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 500; letter-spacing: -0.025em; line-height: 1.15; }
   .modal-inner .meta { margin-top: 6px; }
-  .modal-inner .chips { margin-top: 14px; }
+  .modal-inner .chips, .modal-inner .awards { margin-top: 14px; }
   .details { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
   .media { margin-top: 28px; display: flex; flex-direction: column; gap: 24px; }
   .media figure { display: flex; flex-direction: column; gap: 8px; }
@@ -130,7 +137,8 @@
     .profile { grid-template-columns: 1fr; }
   }
   @media (max-width: 480px) {
-    .lists { grid-template-columns: 1fr; }
+    .skill-groups { grid-template-columns: 1fr; gap: 4px; }
+    .skill-groups dd { margin-bottom: 8px; }
     .nav-name { display: none; }
     .nav .wrap { justify-content: center; }
   }
@@ -159,8 +167,8 @@
       <p class="bio" id="bio"></p>
       <div class="contact" id="contact"></div>
       <div class="lists">
-        <div><h3>Skills</h3><div class="chips" id="skills"></div></div>
-        <div><h3>Interests</h3><div class="chips" id="interests"></div></div>
+        <div><h3>Career interests</h3><div class="chips" id="interests"></div></div>
+        <div><h3>Skills</h3><dl class="skill-groups" id="skills"></dl></div>
       </div>
     </div>
   </header>
@@ -192,69 +200,115 @@
    - Google Drive links work for all three (share as "Anyone with the link").
    - YouTube links work for video.
    - Plain image URLs or repo paths (e.g. "images/robot.jpg") work for images.
+   - Google Docs links work for "pdf" too.
    Card cover: set `cover`, otherwise the first media item's thumbnail is used.
+   `award` (optional): a string or a list of strings, shown as highlighted badges.
+   `skills`: groups of tags, as { "Group name": ["Skill", ...] }.
    ============================================================ */
 const SITE = {
   name: "Ansh Kuckreja",
   tagline: "Robotics, Electrical and Biomedical Engineering · Your school",
-  photo: "",  // image URL, repo path, or Drive link; leave "" to show initials
-  bio: "Two or three sentences about who you are, what you work on, and what you're looking for.",
+  photo: "https://drive.google.com/file/d/18ZTlIPgkbTTcAgv9K_AZyz_0p9VhBaQ5/view?usp=sharing",
+  bio: "This website showcases some of my relevant technical projects from previous years, as well as some of my proudest leadership experiences – the stuff that the resume doesn't always cover!",
   email: "you@example.com",
   links: [
-    { label: "LinkedIn", url: "https://linkedin.com/in/your-username" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/anshkuckreja/" },
     { label: "GitHub", url: "https://github.com/akuckreja02" },
     { label: "Resume", url: "#" }
   ],
-  skills: ["Skill one", "Skill two", "Skill three", "Skill four"],
-  interests: ["Interest one", "Interest two", "Interest three"]
+  interests: ["Robotics", "Biomedical engineering", "Systems engineering", "Electrical engineering"],
+  skills: {
+    "Languages": ["Python", "MATLAB", "Java", "C++", "SQL", "Verilog HDL"],
+    "Robotics": ["ROS2", "KUKA", "Simulink", "Arduino", "LTSpice", "Keil μVision", "PCB (EasyEDA)", "Oscilloscopes", "Probes"],
+    "CAD": ["SolidWorks", "Autodesk Inventor", "3D Printing"],
+    "Tools": ["Git", "LaTeX", "Docker", "MS Suite", "Figma"]
+  }
 };
 
 const PROJECTS = [
   {
-    title: "Project One",
-    subtitle: "Course, lab, or team",
-    date: "2026",
-    summary: "One or two sentences shown on the card.",
-    tags: ["Tool", "Method"],
-    details: [
-      "Longer description shown in the pop-up. Each string is its own paragraph.",
-      "What you did, how you did it, and what came out of it."
-    ],
+    title: "Autonomous Robotic Needle Steering System",
+    subtitle: "MSc Dissertation · Bristol Robotics Laboratory",
+    date: "Jan – Sept 2026",
+    award: "Best Communicated Dissertation 2026",
+    summary: "Real-time closed-loop system to autonomously steer a needle during prostate radiotherapy.",
+    tags: [],
+    details: [],
+    cover: "https://drive.google.com/file/d/1dPs6cmkKU1_GoVij9eFz93GlLlr8hUO3/view?usp=sharing",
     media: [
-      // { type: "image", url: "https://drive.google.com/file/d/FILE_ID/view", caption: "Final prototype" },
-      // { type: "video", url: "https://youtu.be/VIDEO_ID", caption: "Demo run" },
-      // { type: "pdf",   url: "https://drive.google.com/file/d/FILE_ID/view", caption: "Final report" }
+      { type: "video", url: "https://drive.google.com/file/d/1vPcwTd98-z-6N8gnB6Q3EB4LylGAq8WA/view?usp=sharing", caption: "Demo" },
+      { type: "pdf",   url: "https://drive.google.com/file/d/172BSIv56dFKf0FIgW6fHW8mmRocKr61u/view?usp=sharing", caption: "Dissertation" }
     ],
-    links: [{ label: "Source", url: "#" }]
-  },
-  {
-    title: "Project Two",
-    subtitle: "Course, lab, or team",
-    date: "2025",
-    summary: "One or two sentences shown on the card.",
-    tags: ["Tool", "Method"],
-    details: ["Longer description shown in the pop-up."],
-    media: [],
     links: []
   },
   {
-    title: "Project Three",
-    subtitle: "Course, lab, or team",
-    date: "2025",
-    summary: "One or two sentences shown on the card.",
-    tags: ["Tool", "Method"],
-    details: ["Longer description shown in the pop-up."],
-    media: [],
+    title: "Electronic Myometric Gloves",
+    subtitle: "B.Eng. BME Capstone Project · McMaster University",
+    date: "Sept 2024 – Apr 2025",
+    award: "Grad to Watch",
+    summary: "Designed and built a wearable sensing glove that captures and interprets muscle-force data for physicians during in-clinic muscle testing.",
+    tags: [],
+    details: [],
+    media: [
+      { type: "image", url: "https://drive.google.com/file/d/1LAY2Yfz3ZfD8EHsWT_QfceWrsF8QPyTO/view?usp=sharing" },
+      { type: "image", url: "https://drive.google.com/file/d/1ttJvNUjAj6olzF6f5swZGXMEok4MrJgs/view?usp=sharing" },
+      { type: "pdf",   url: "https://drive.google.com/file/d/1S0c6G8e1B4CSPhrEO2dz7o2vp-zb193J/view?usp=sharing", caption: "Capstone report" }
+    ],
     links: []
   },
   {
-    title: "Project Four",
-    subtitle: "Course, lab, or team",
-    date: "2024",
-    summary: "One or two sentences shown on the card.",
-    tags: ["Tool", "Method"],
-    details: ["Longer description shown in the pop-up."],
-    media: [],
+    title: "Competitive Sumobot",
+    subtitle: "",
+    date: "",
+    award: "4th place in university competition, qualified for provincials",
+    summary: "Autonomous competitive sumobot built to a maximum of 10 cm × 10 cm and under 500 g.",
+    tags: [],
+    details: [],
+    media: [
+      { type: "image", url: "https://drive.google.com/file/d/1dqQDs29JoPU_jLvAZK07F-65Q2qh7LLd/view?usp=sharing" },
+      { type: "video", url: "https://drive.google.com/file/d/1LhmIECRRHSK9SymXpvE2y92HuAdvdtAF/view?usp=sharing", caption: "Match footage" }
+    ],
+    links: [{ label: "Sumobot competition", url: "https://www.sumobot.ca/" }]
+  },
+  {
+    title: "Leader-Follower Robotic System",
+    subtitle: "Robotic Science and Systems (course)",
+    date: "Sept – Dec 2025",
+    summary: "Evaluated the performance of a single- versus dual-emitter IR leader-follower robotic system using Raspberry Pi 3 robots.",
+    tags: [],
+    details: [],
+    media: [
+      { type: "image", url: "https://drive.google.com/file/d/1iDoZ9xxXfxfwIWMndVLwbXzb8FbY2o2A/view?usp=sharing" },
+      { type: "pdf",   url: "https://drive.google.com/file/d/1jvAatO4Tai_snKUVM5X4d-uUdC_vWoPN/view?usp=sharing", caption: "Paper" }
+    ],
+    links: []
+  },
+  {
+    title: "Motorized Prosthetic Hand",
+    subtitle: "McMaster Medical Engineering Design Team (MED-T)",
+    date: "Sept 2022 – Apr 2023",
+    summary: "Collected muscle contraction data for the software sub-team of a motorized prosthetic hand, and wrote an extensive guide to filtering EMG signals for future sub-team members.",
+    tags: [],
+    details: [],
+    media: [
+      { type: "image", url: "https://drive.google.com/file/d/1lFhrJhPjsEgquyI54kl1tFlVO-bKcSXY/view?usp=sharing" },
+      { type: "pdf",   url: "https://docs.google.com/document/d/17GQfiK8Mi8lVD5p3hvJ5owsHCLwbuF_1KxIGaQchMDc/edit?usp=sharing", caption: "EMG filtering guide" }
+    ],
+    links: [{ label: "MED-T", url: "https://www.macmed-t.com/" }]
+  },
+  {
+    title: "Autonomous Environment-Mapping Robot",
+    subtitle: "Microprocessor Systems Project (course)",
+    date: "Jan – Apr 2022",
+    award: "Grade: A+",
+    summary: "Autonomous robot that maps its surrounding environment.",
+    tags: [],
+    details: [],
+    media: [
+      { type: "image", url: "https://drive.google.com/file/d/10wpkSv9zVfdhCtCElrzm88cmAepqexcn/view?usp=sharing" },
+      { type: "video", url: "https://drive.google.com/file/d/1CM3Itgc0AjKyjn7UVOLWTmyb2hmGNCXE/view?usp=sharing", caption: "Demo" },
+      { type: "pdf",   url: "https://drive.google.com/file/d/1QAWx2gcCuobVXOZZjDoMlywp-kMDwjCc/view?usp=sharing", caption: "Project report" }
+    ],
     links: []
   }
 ];
@@ -301,8 +355,17 @@ const chips = (list) => {
   return c;
 };
 
+const awards = (item) => {
+  const list = [].concat(item.award || []);
+  if (!list.length) return null;
+  const a = el("div", "awards");
+  list.forEach((x) => a.appendChild(el("span", null, x)));
+  return a;
+};
+
 /* --- media URL handling (Drive / YouTube / plain) --- */
-const driveId = (u) => /drive\.google\.com/.test(u)
+const gdoc = (u) => u.match(/docs\.google\.com\/(document|presentation|spreadsheets)\/d\/([\w-]+)/);
+const driveId = (u) => gdoc(u) ? gdoc(u)[2] : /drive\.google\.com/.test(u)
   ? ((u.match(/\/d\/([\w-]+)/) || u.match(/[?&]id=([\w-]+)/) || [])[1] || null) : null;
 const ytId = (u) => /youtu\.?be/.test(u)
   ? ((u.match(/(?:youtu\.be\/|[?&]v=|embed\/|shorts\/)([\w-]{11})/) || [])[1] || null) : null;
@@ -321,7 +384,7 @@ const coverOf = (item) => item.cover
 
 function mediaNode(m) {
   const fig = el("figure");
-  const y = ytId(m.url), d = driveId(m.url);
+  const y = ytId(m.url), d = driveId(m.url), g = gdoc(m.url);
   if (m.type === "image") {
     const img = el("img"); img.src = imageSrc(m.url, 2000); img.alt = m.caption || ""; img.loading = "lazy";
     fig.appendChild(img);
@@ -330,14 +393,15 @@ function mediaNode(m) {
     fig.appendChild(v);
   } else {
     const f = el("iframe", m.type === "pdf" ? "pdf" : "video");
-    f.src = y ? `https://www.youtube-nocookie.com/embed/${y}` : d ? `https://drive.google.com/file/d/${d}/preview` : m.url;
+    f.src = y ? `https://www.youtube-nocookie.com/embed/${y}`
+      : g ? `https://docs.google.com/${g[1]}/d/${g[2]}/preview` : d ? `https://drive.google.com/file/d/${d}/preview` : m.url;
     f.title = m.caption || m.type; f.loading = "lazy";
     f.allow = "autoplay; fullscreen; encrypted-media; picture-in-picture"; f.allowFullscreen = true;
     fig.appendChild(f);
   }
   const cap = el("figcaption");
   if (m.caption) cap.appendChild(el("span", null, m.caption));
-  if (m.type === "pdf") cap.appendChild(extLink("Open PDF ↗", m.url));
+  if (m.type === "pdf") cap.appendChild(extLink(g ? "Open document ↗" : "Open PDF ↗", m.url));
   if (cap.childNodes.length) fig.appendChild(cap);
   return fig;
 }
@@ -358,7 +422,10 @@ if (SITE.photo) {
 const mail = el("a", null, SITE.email); mail.href = "mailto:" + SITE.email;
 $("contact").appendChild(mail);
 SITE.links.forEach((l) => $("contact").appendChild(extLink(l.label, l.url)));
-$("skills").replaceWith(Object.assign(chips(SITE.skills), { id: "skills" }));
+Object.entries(SITE.skills).forEach(([group, list]) => {
+  const dd = el("dd"); dd.appendChild(chips(list));
+  $("skills").append(el("dt", null, group), dd);
+});
 $("interests").replaceWith(Object.assign(chips(SITE.interests), { id: "interests" }));
 $("footer").textContent = "© " + new Date().getFullYear() + " " + SITE.name;
 
@@ -376,6 +443,7 @@ function card(item) {
   body.appendChild(el("h3", "card-title", item.title));
   const meta = [item.subtitle, item.date].filter(Boolean).join(" · ");
   if (meta) body.appendChild(el("p", "meta", meta));
+  if (awards(item)) body.appendChild(awards(item));
   if (item.summary) body.appendChild(el("p", "summary", item.summary));
   if (item.tags && item.tags.length) body.appendChild(chips(item.tags));
   body.appendChild(el("span", "more", "Details →"));
@@ -395,6 +463,7 @@ function openItem(item) {
   body.appendChild(h);
   const meta = [item.subtitle, item.date].filter(Boolean).join(" · ");
   if (meta) body.appendChild(el("p", "meta", meta));
+  if (awards(item)) body.appendChild(awards(item));
   if (item.tags && item.tags.length) body.appendChild(chips(item.tags));
   const details = el("div", "details");
   (item.details && item.details.length ? item.details : [item.summary]).filter(Boolean)
