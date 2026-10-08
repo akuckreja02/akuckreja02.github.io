@@ -15,10 +15,12 @@
     --muted: #70757f;
     --line: #e6e7ea;
     --accent: #2d4bff;
+    --gold-ink: #8a6100;
+    --gold-bg: #fbefc8;
     --font: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #101114; --soft: #1a1c20; --ink: #f1f2f4; --muted: #8b909a; --line: #25272d; --accent: #7d92ff; }
+    :root { --bg: #101114; --soft: #1a1c20; --ink: #f1f2f4; --muted: #8b909a; --line: #25272d; --accent: #7d92ff; --gold-ink: #f0c24b; --gold-bg: rgba(240, 194, 75, .14); }
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; scroll-padding-top: 72px; }
@@ -47,13 +49,15 @@
 
   /* profile */
   .profile {
-    display: grid; grid-template-columns: auto 1fr; gap: clamp(24px, 5vw, 56px);
-    padding: clamp(48px, 10vh, 96px) 0 clamp(40px, 8vh, 72px); align-items: start;
+    display: grid; grid-template-columns: clamp(220px, 28vw, 320px) 1fr; gap: clamp(24px, 5vw, 56px);
+    padding: clamp(48px, 10vh, 96px) 0 clamp(40px, 8vh, 72px); align-items: stretch;
   }
+  /* portrait photo stretches to the full height of the profile text */
+  #photo { position: relative; min-height: 360px; }
   .photo {
-    width: clamp(120px, 18vw, 180px); aspect-ratio: 1; border-radius: 50%;
+    position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 16px;
     object-fit: cover; background: var(--soft);
-    display: grid; place-items: center; font-size: 2.4rem; font-weight: 300; color: var(--muted);
+    display: grid; place-items: center; font-size: 3rem; font-weight: 300; color: var(--muted);
   }
   h1 { font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 300; line-height: 1.05; letter-spacing: -0.035em; }
   .tagline { margin-top: 10px; font-size: 1.15rem; color: var(--muted); }
@@ -63,21 +67,32 @@
   .contact a:hover { color: var(--accent); }
   .lists { margin-top: 28px; display: flex; flex-direction: column; gap: 22px; }
   .skill-groups { display: grid; grid-template-columns: max-content 1fr; gap: 10px 16px; align-items: baseline; }
-  .skill-groups dt { font-size: .9rem; color: var(--muted); }
-  .lists h3 { font-size: .8rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .skill-groups dt { font-size: .9rem; font-weight: 700; }
+  .lists h3 { font-size: .85rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
 
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chips span { font-size: .85rem; padding: 3px 10px; border-radius: 999px; background: var(--soft); color: var(--muted); }
   .awards { display: flex; flex-wrap: wrap; gap: 6px; }
   .awards span {
-    font-size: .8rem; font-weight: 500; padding: 3px 10px; border-radius: 999px;
-    color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent);
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: .8rem; font-weight: 600; padding: 3px 10px 3px 8px; border-radius: 999px;
+    color: var(--gold-ink); background: var(--gold-bg);
+    border: 1px solid color-mix(in srgb, var(--gold-ink) 30%, transparent);
+  }
+  .awards svg, .badge svg { width: 13px; height: 13px; flex: none; }
+  .section-intro { max-width: 46em; margin: -12px 0 28px; line-height: 2; }
+  .section-intro .badge {
+    display: inline-flex; align-items: center; gap: 5px; vertical-align: 1px;
+    font-size: .85rem; font-weight: 600; line-height: 1.5; padding: 1px 10px 1px 8px; border-radius: 999px;
+    color: var(--gold-ink); background: var(--gold-bg);
+    border: 1px solid color-mix(in srgb, var(--gold-ink) 30%, transparent);
   }
 
   /* sections */
   section.block { padding: clamp(40px, 8vh, 72px) 0; border-top: 1px solid var(--line); }
   h2.section-title { font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 500; letter-spacing: -0.025em; margin-bottom: 28px; }
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2.5vw, 28px); }
+  .grid.three { grid-template-columns: repeat(3, 1fr); }
 
   /* cards */
   .card {
@@ -116,6 +131,8 @@
   .modal-close button:focus-visible { outline: 2px solid var(--accent); }
   #modal-title { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 500; letter-spacing: -0.025em; line-height: 1.15; }
   .modal-inner .meta { margin-top: 6px; }
+  .modal-inner .meta a { color: var(--ink); border-bottom: 1px solid var(--accent); }
+  .modal-inner .meta a:hover { color: var(--accent); }
   .modal-inner .chips, .modal-inner .awards { margin-top: 14px; }
   .details { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
   .media { margin-top: 28px; display: flex; flex-direction: column; gap: 24px; }
@@ -123,6 +140,12 @@
   .media img, .media video { width: 100%; border-radius: 10px; background: var(--soft); }
   .media iframe { width: 100%; border: 0; border-radius: 10px; background: var(--soft); }
   .media iframe.video { aspect-ratio: 16 / 9; }
+  /* rotated images: box takes the rotated shape, image is turned inside it */
+  .rot { position: relative; width: 100%; aspect-ratio: 16 / 9; container-type: size; overflow: hidden; border-radius: 10px; background: var(--soft); }
+  .media .rot img {
+    position: absolute; top: 50%; left: 50%; width: 100cqh; height: 100cqw; max-width: none;
+    object-fit: contain; border-radius: 0; transform: translate(-50%, -50%) rotate(var(--r));
+  }
   .media iframe.pdf { aspect-ratio: 8.5 / 11; max-height: 80dvh; }
   .media figcaption { font-size: .9rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 14px; }
   .media figcaption a { color: var(--accent); }
@@ -132,9 +155,13 @@
 
   footer { padding: 40px 0 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
 
+  @media (max-width: 960px) {
+    .grid.three { grid-template-columns: 1fr 1fr; }
+  }
   @media (max-width: 720px) {
-    .grid { grid-template-columns: 1fr; }
+    .grid, .grid.three { grid-template-columns: 1fr; }
     .profile { grid-template-columns: 1fr; }
+    #photo { width: min(100%, 340px); aspect-ratio: 3 / 4; min-height: 0; }
   }
   @media (max-width: 480px) {
     .skill-groups { grid-template-columns: 1fr; gap: 4px; }
@@ -176,10 +203,11 @@
   <main>
     <section class="block" id="projects">
       <h2 class="section-title">Technical projects</h2>
-      <div class="grid" id="project-grid"></div>
+      <div class="grid three" id="project-grid"></div>
     </section>
     <section class="block" id="experience">
       <h2 class="section-title">Leadership &amp; volunteering</h2>
+      <p class="section-intro" id="experience-intro"></p>
       <div class="grid" id="experience-grid"></div>
     </section>
   </main>
@@ -202,19 +230,22 @@
    - Plain image URLs or repo paths (e.g. "images/robot.jpg") work for images.
    - Google Docs links work for "pdf" too.
    Card cover: set `cover`, otherwise the first media item's thumbnail is used.
-   `award` (optional): a string or a list of strings, shown as highlighted badges.
+   Media `rotate` (optional, images only): 90 or -90 to turn a sideways photo.
+   `award` (optional): a string or a list of strings, shown as gold badges.
+   `subtitleUrl` (optional): makes the subtitle a link in the pop-up.
    `skills`: groups of tags, as { "Group name": ["Skill", ...] }.
    ============================================================ */
 const SITE = {
   name: "Ansh Kuckreja",
-  tagline: "Robotics, Electrical and Biomedical Engineering · Your school",
+  tagline: "Engineer: Robotics, Electrical, Biomedical",
   photo: "https://drive.google.com/file/d/18ZTlIPgkbTTcAgv9K_AZyz_0p9VhBaQ5/view?usp=sharing",
+  photoPosition: "72% 30%",  // which part of the photo stays visible when cropped (horizontal, vertical)
   bio: "This website showcases some of my relevant technical projects from previous years, as well as some of my proudest leadership experiences – the stuff that the resume doesn't always cover!",
-  email: "you@example.com",
+  email: "akuckreja02@gmail.com",
   links: [
     { label: "LinkedIn", url: "https://www.linkedin.com/in/anshkuckreja/" },
     { label: "GitHub", url: "https://github.com/akuckreja02" },
-    { label: "Resume", url: "#" }
+    { label: "Resume", url: "https://drive.google.com/file/d/1GeuX_jRBVxHS5yuIToptn0hmGg7xhVKB/view?usp=sharing" }
   ],
   interests: ["Robotics", "Biomedical engineering", "Systems engineering", "Electrical engineering"],
   skills: {
@@ -249,26 +280,31 @@ const PROJECTS = [
     summary: "Designed and built a wearable sensing glove that captures and interprets muscle-force data for physicians during in-clinic muscle testing.",
     tags: [],
     details: [],
+    cover: "https://drive.google.com/file/d/12GCYL94Wsc7r--jXrxWNgEmL6-QpV6fW/view?usp=sharing",
     media: [
-      { type: "image", url: "https://drive.google.com/file/d/1LAY2Yfz3ZfD8EHsWT_QfceWrsF8QPyTO/view?usp=sharing" },
+      { type: "video", url: "https://drive.google.com/file/d/1bbLFaNKDhLKlz4NbwfqiaK8TCZW0WIVg/view?usp=sharing" },
+      { type: "image", url: "https://drive.google.com/file/d/1LAY2Yfz3ZfD8EHsWT_QfceWrsF8QPyTO/view?usp=sharing", rotate: 90 },
+      { type: "image", url: "https://drive.google.com/file/d/1pZfhDSRyjPq5zGO4ZSeJJYazaShOr7Mx/view?usp=sharing", rotate: 90 },
       { type: "image", url: "https://drive.google.com/file/d/1ttJvNUjAj6olzF6f5swZGXMEok4MrJgs/view?usp=sharing" },
       { type: "pdf",   url: "https://drive.google.com/file/d/1S0c6G8e1B4CSPhrEO2dz7o2vp-zb193J/view?usp=sharing", caption: "Capstone report" }
     ],
     links: []
   },
   {
-    title: "Competitive Sumobot",
-    subtitle: "",
-    date: "",
-    award: "4th place in university competition, qualified for provincials",
+    title: "Autonomous Competitive Sumobot",
+    subtitle: "McMaster Sumobot Competition",
+    subtitleUrl: "https://www.sumobot.ca/",
+    date: "Sept 2024 – Apr 2025",
+    award: "Top 4 in University, Top 8 in Provincials",
     summary: "Autonomous competitive sumobot built to a maximum of 10 cm × 10 cm and under 500 g.",
     tags: [],
     details: [],
+    cover: "https://drive.google.com/file/d/1x8HD4vokp5e1qGgzq5rRkKgqa1DfgWT7/view?usp=sharing",
     media: [
-      { type: "image", url: "https://drive.google.com/file/d/1dqQDs29JoPU_jLvAZK07F-65Q2qh7LLd/view?usp=sharing" },
-      { type: "video", url: "https://drive.google.com/file/d/1LhmIECRRHSK9SymXpvE2y92HuAdvdtAF/view?usp=sharing", caption: "Match footage" }
+      { type: "video", url: "https://drive.google.com/file/d/1LhmIECRRHSK9SymXpvE2y92HuAdvdtAF/view?usp=sharing", caption: "Match footage" },
+      { type: "image", url: "https://drive.google.com/file/d/1dqQDs29JoPU_jLvAZK07F-65Q2qh7LLd/view?usp=sharing" }
     ],
-    links: [{ label: "Sumobot competition", url: "https://www.sumobot.ca/" }]
+    links: []
   },
   {
     title: "Leader-Follower Robotic System",
@@ -277,24 +313,12 @@ const PROJECTS = [
     summary: "Evaluated the performance of a single- versus dual-emitter IR leader-follower robotic system using Raspberry Pi 3 robots.",
     tags: [],
     details: [],
+    cover: "https://drive.google.com/file/d/1Sd2nxs12P8AIEp_7JMLd_8kE4T7oQBFa/view?usp=sharing",
     media: [
       { type: "image", url: "https://drive.google.com/file/d/1iDoZ9xxXfxfwIWMndVLwbXzb8FbY2o2A/view?usp=sharing" },
       { type: "pdf",   url: "https://drive.google.com/file/d/1jvAatO4Tai_snKUVM5X4d-uUdC_vWoPN/view?usp=sharing", caption: "Paper" }
     ],
     links: []
-  },
-  {
-    title: "Motorized Prosthetic Hand",
-    subtitle: "McMaster Medical Engineering Design Team (MED-T)",
-    date: "Sept 2022 – Apr 2023",
-    summary: "Collected muscle contraction data for the software sub-team of a motorized prosthetic hand, and wrote an extensive guide to filtering EMG signals for future sub-team members.",
-    tags: [],
-    details: [],
-    media: [
-      { type: "image", url: "https://drive.google.com/file/d/1lFhrJhPjsEgquyI54kl1tFlVO-bKcSXY/view?usp=sharing" },
-      { type: "pdf",   url: "https://docs.google.com/document/d/17GQfiK8Mi8lVD5p3hvJ5owsHCLwbuF_1KxIGaQchMDc/edit?usp=sharing", caption: "EMG filtering guide" }
-    ],
-    links: [{ label: "MED-T", url: "https://www.macmed-t.com/" }]
   },
   {
     title: "Autonomous Environment-Mapping Robot",
@@ -310,28 +334,57 @@ const PROJECTS = [
       { type: "pdf",   url: "https://drive.google.com/file/d/1QAWx2gcCuobVXOZZjDoMlywp-kMDwjCc/view?usp=sharing", caption: "Project report" }
     ],
     links: []
+  },
+  {
+    title: "Motorized Prosthetic Hand",
+    subtitle: "McMaster Medical Engineering Design Team (MED-T)",
+    date: "Sept 2022 – Apr 2023",
+    summary: "Collected muscle contraction data for the software sub-team of a motorized prosthetic hand, and wrote an extensive guide to filtering EMG signals for future sub-team members.",
+    tags: [],
+    details: [],
+    media: [
+      { type: "image", url: "https://drive.google.com/file/d/1lFhrJhPjsEgquyI54kl1tFlVO-bKcSXY/view?usp=sharing" },
+      { type: "video", url: "https://drive.google.com/file/d/1Ns2-RKEFF8uo-azf6aX85ydcji3HiokD/view?usp=sharing" },
+      { type: "pdf",   url: "https://docs.google.com/document/d/17GQfiK8Mi8lVD5p3hvJ5owsHCLwbuF_1KxIGaQchMDc/edit?usp=sharing", caption: "EMG filtering guide" }
+    ],
+    links: [{ label: "MED-T", url: "https://www.macmed-t.com/" }]
   }
 ];
 
+// Shown under the Leadership heading. Text in [[double brackets]] becomes a gold award badge.
+const LEADERSHIP_INTRO = "I've always strived to go above and beyond in any community I'm in. All my endeavors eventually won me the [[2025 Leadership Award]] and [[Grad to Watch]].";
+
 const EXPERIENCE = [
   {
-    title: "Role title",
-    subtitle: "Organization",
-    date: "2024 – present",
-    summary: "One or two sentences shown on the card.",
+    title: "Engineering Welcome Week",
+    subtitle: "Lead Planner · McMaster Engineering",
+    date: "2020 – 2024",
+    summary: "Led the logistics of 15+ events for 1,700 first-year students, directing a team of 14 committee members and 160 student representatives.",
     tags: [],
-    details: ["Longer description shown in the pop-up."],
-    media: [],
+    details: [
+      "Lead Planner (2023 – 2024) · Planning Committee Member (2021 – 2023) · Representative (2020 – 2021)",
+      "One of the largest leadership roles available to undergraduate students, I spent over 25 hours/week developing the logistics of 15+ events for 1700 first-year students. I worked closely with Faculty members and directly led a team of 14 committee members and 160 student representatives. In addition to managing a $100,000 budget and ensuring all logistics were accounted for, this role taught me so much about leading people and what it truly meant to represent McMaster Engineering."
+    ],
+    cover: "https://drive.google.com/file/d/1RYM5uLwje6wHCh78FMPaZB3_ovUVTiVf/view?usp=sharing",
+    media: [
+      { type: "image", url: "https://drive.google.com/file/d/1-9G1OUAb2iG151lMcv9TPWdCFImIs8IA/view?usp=sharing" }
+    ],
     links: []
   },
   {
-    title: "Role title",
-    subtitle: "Organization",
-    date: "2023 – 2024",
-    summary: "One or two sentences shown on the card.",
+    title: "McMaster iBioMed Society",
+    subtitle: "Co-President",
+    date: "2021 – 2023",
+    summary: "Worked to enhance the academic and social experiences of over 800 iBioMed students, acting as the link between students, professors and program directors.",
     tags: [],
-    details: ["Longer description shown in the pop-up."],
-    media: [],
+    details: [
+      "As co-president, I dedicated several hours per week to enhancing the academic and social experiences of over 800 iBioMed students. I chaired weekly Society meetings, helped organize social events for iBioMed students, relayed course feedback between students from all years and professors, and led monthly meetings with the program directors.",
+      "This was a leadership experience that allowed me to have a direct impact on the iBioMed community, both from a student perspective (through heeding course feedback and social events), and from a Faculty perspective (letting Faculty and Co-directors know how students are feeling, and giving them feedback on ideas they have for administrative changes)."
+    ],
+    cover: "https://drive.google.com/file/d/1hU5N3KmvFjKos1nTCPox3-XUDZhi1qkL/view?usp=sharing",
+    media: [
+      { type: "image", url: "https://drive.google.com/file/d/1gvYLnqMkDVD6KgAKW9004HbCRs42o4-i/view?usp=sharing" }
+    ],
     links: []
   }
 ];
@@ -355,11 +408,15 @@ const chips = (list) => {
   return c;
 };
 
+const TROPHY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3"/></svg>';
 const awards = (item) => {
   const list = [].concat(item.award || []);
   if (!list.length) return null;
   const a = el("div", "awards");
-  list.forEach((x) => a.appendChild(el("span", null, x)));
+  list.forEach((x) => {
+    const b = el("span"); b.innerHTML = TROPHY; b.append(x);
+    a.appendChild(b);
+  });
   return a;
 };
 
@@ -387,7 +444,11 @@ function mediaNode(m) {
   const y = ytId(m.url), d = driveId(m.url), g = gdoc(m.url);
   if (m.type === "image") {
     const img = el("img"); img.src = imageSrc(m.url, 2000); img.alt = m.caption || ""; img.loading = "lazy";
-    fig.appendChild(img);
+    if (m.rotate) {
+      const box = el("div", "rot"); box.style.setProperty("--r", m.rotate + "deg");
+      img.onload = () => { box.style.aspectRatio = img.naturalHeight + " / " + img.naturalWidth; };
+      box.appendChild(img); fig.appendChild(box);
+    } else fig.appendChild(img);
   } else if (m.type === "video" && !y && !d) {
     const v = el("video"); v.src = m.url; v.controls = true; v.playsInline = true; v.preload = "metadata";
     fig.appendChild(v);
@@ -413,7 +474,8 @@ $("name").textContent = SITE.name;
 $("tagline").textContent = SITE.tagline;
 $("bio").textContent = SITE.bio;
 if (SITE.photo) {
-  const img = el("img", "photo"); img.src = imageSrc(SITE.photo, 600); img.alt = SITE.name;
+  const img = el("img", "photo"); img.src = imageSrc(SITE.photo, 1600); img.alt = SITE.name;
+  if (SITE.photoPosition) img.style.objectPosition = SITE.photoPosition;
   $("photo").appendChild(img);
 } else {
   const initials = SITE.name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
@@ -453,6 +515,11 @@ function card(item) {
 }
 PROJECTS.forEach((p) => $("project-grid").appendChild(card(p)));
 EXPERIENCE.forEach((x) => $("experience-grid").appendChild(card(x)));
+LEADERSHIP_INTRO.split(/\[\[(.+?)\]\]/).forEach((part, i) => {
+  if (i % 2 === 0) { $("experience-intro").append(part); return; }
+  const b = el("span", "badge"); b.innerHTML = TROPHY; b.append(part);
+  $("experience-intro").appendChild(b);
+});
 
 /* --- pop-up --- */
 const modal = $("modal");
@@ -461,8 +528,13 @@ function openItem(item) {
   body.replaceChildren();
   const h = el("h2", null, item.title); h.id = "modal-title";
   body.appendChild(h);
-  const meta = [item.subtitle, item.date].filter(Boolean).join(" · ");
-  if (meta) body.appendChild(el("p", "meta", meta));
+  if (item.subtitle || item.date) {
+    const meta = el("p", "meta");
+    if (item.subtitle) meta.append(item.subtitleUrl ? extLink(item.subtitle, item.subtitleUrl) : item.subtitle);
+    if (item.subtitle && item.date) meta.append(" · ");
+    if (item.date) meta.append(item.date);
+    body.appendChild(meta);
+  }
   if (awards(item)) body.appendChild(awards(item));
   if (item.tags && item.tags.length) body.appendChild(chips(item.tags));
   const details = el("div", "details");
