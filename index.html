@@ -33,6 +33,24 @@
   a { color: inherit; text-decoration: none; }
   a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   img { max-width: 100%; display: block; }
+  body { position: relative; }
+
+  /* decorative engineering/science shapes in the side margins (wide screens only) */
+  :root { --deco-blue: var(--accent); --deco-gold: #e0a91b; --deco-coral: #f26b5b; --deco-teal: #14b8a6; --deco-opacity: .5; }
+  @media (prefers-color-scheme: dark) { :root { --deco-opacity: .4; } }
+  .deco { position: absolute; inset: 0; pointer-events: none; overflow: hidden; display: none; }
+  .deco-side { position: absolute; top: 0; bottom: 0; width: calc((100% - 1100px) / 2); }
+  .deco-side.left { left: 0; }
+  .deco-side.right { right: 0; }
+  .deco svg {
+    position: absolute; transform: translate(-50%, -50%) rotate(var(--rot));
+    opacity: var(--deco-opacity); fill: none; stroke: currentColor;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .deco svg.spin { animation: deco-spin 80s linear infinite; }
+  @keyframes deco-spin { to { transform: translate(-50%, -50%) rotate(calc(var(--rot) + 360deg)); } }
+  @media (min-width: 1260px) { .deco { display: block; } }
+
   .wrap { max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 56px); }
 
   /* nav */
@@ -92,7 +110,6 @@
   section.block { padding: clamp(40px, 8vh, 72px) 0; border-top: 1px solid var(--line); }
   h2.section-title { font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 500; letter-spacing: -0.025em; margin-bottom: 28px; }
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2.5vw, 28px); }
-  .grid.three { grid-template-columns: repeat(3, 1fr); }
 
   /* cards */
   .card {
@@ -155,11 +172,8 @@
 
   footer { padding: 40px 0 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
 
-  @media (max-width: 960px) {
-    .grid.three { grid-template-columns: 1fr 1fr; }
-  }
   @media (max-width: 720px) {
-    .grid, .grid.three { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: 1fr; }
     .profile { grid-template-columns: 1fr; }
     #photo { width: min(100%, 340px); aspect-ratio: 3 / 4; min-height: 0; }
   }
@@ -169,10 +183,12 @@
     .nav-name { display: none; }
     .nav .wrap { justify-content: center; }
   }
-  @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
 </style>
 </head>
 <body>
+
+<div class="deco" id="deco" aria-hidden="true"><div class="deco-side left"></div><div class="deco-side right"></div></div>
 
 <nav class="nav" aria-label="Sections">
   <div class="wrap">
@@ -203,7 +219,7 @@
   <main>
     <section class="block" id="projects">
       <h2 class="section-title">Technical projects</h2>
-      <div class="grid three" id="project-grid"></div>
+      <div class="grid" id="project-grid"></div>
     </section>
     <section class="block" id="experience">
       <h2 class="section-title">Leadership &amp; volunteering</h2>
@@ -239,13 +255,13 @@ const SITE = {
   name: "Ansh Kuckreja",
   tagline: "Engineer: Robotics, Electrical, Biomedical",
   photo: "https://drive.google.com/file/d/18ZTlIPgkbTTcAgv9K_AZyz_0p9VhBaQ5/view?usp=sharing",
-  photoPosition: "72% 30%",  // which part of the photo stays visible when cropped (horizontal, vertical)
-  bio: "This website showcases some of my relevant technical projects from previous years, as well as some of my proudest leadership experiences – the stuff that the resume doesn't always cover!",
+  photoPosition: "64% 30%",  // which part of the photo stays visible when cropped (horizontal, vertical)
+  bio: "Hi! I'm Ansh, an engineer looking to make real impact with his work. This website showcases some of my relevant technical projects from previous years, as well as some of my proudest leadership experiences – the stuff a 1-page CV can't fully cover!",
   email: "akuckreja02@gmail.com",
   links: [
+    { label: "Resume", url: "https://drive.google.com/file/d/1GeuX_jRBVxHS5yuIToptn0hmGg7xhVKB/view?usp=sharing" },
     { label: "LinkedIn", url: "https://www.linkedin.com/in/anshkuckreja/" },
-    { label: "GitHub", url: "https://github.com/akuckreja02" },
-    { label: "Resume", url: "https://drive.google.com/file/d/1GeuX_jRBVxHS5yuIToptn0hmGg7xhVKB/view?usp=sharing" }
+    { label: "GitHub", url: "https://github.com/akuckreja02" }
   ],
   interests: ["Robotics", "Biomedical engineering", "Systems engineering", "Electrical engineering"],
   skills: {
@@ -352,7 +368,7 @@ const PROJECTS = [
 ];
 
 // Shown under the Leadership heading. Text in [[double brackets]] becomes a gold award badge.
-const LEADERSHIP_INTRO = "I've always strived to go above and beyond in any community I'm in. All my endeavors eventually won me the [[2025 Leadership Award]] and [[Grad to Watch]].";
+const LEADERSHIP_INTRO = "I've always strived to go above and beyond in any community I'm in. All my extracurricular endeavours won me the [[2025 Graduate Leadership Award]] and named a [[2025 Grad to Watch]]. Below are two of the organizations I dedicated a significant amount of time to in my undergraduate career. Other leadership involvements include 5 years as an undergraduate Teaching Assistant, iBioMed mentor, peer tutor, and student ambassador.";
 
 const EXPERIENCE = [
   {
@@ -519,6 +535,46 @@ LEADERSHIP_INTRO.split(/\[\[(.+?)\]\]/).forEach((part, i) => {
   if (i % 2 === 0) { $("experience-intro").append(part); return; }
   const b = el("span", "badge"); b.innerHTML = TROPHY; b.append(part);
   $("experience-intro").appendChild(b);
+});
+
+/* --- margin decorations --- */
+const SHAPES = {
+  gear: Array.from({ length: 8 }, (_, i) => `<rect x="21" y="4" width="6" height="8" rx="1" transform="rotate(${i * 45} 24 24)"/>`).join("")
+    + '<circle cx="24" cy="24" r="12"/><circle cx="24" cy="24" r="4"/>',
+  wave: '<path d="M3 24Q10 8 17 24T31 24T45 24"/>',
+  resistor: '<path d="M2 24h8l3-8 5 16 5-16 5 16 5-16 3 8h10"/>',
+  atom: '<ellipse cx="24" cy="24" rx="20" ry="7"/><ellipse cx="24" cy="24" rx="20" ry="7" transform="rotate(60 24 24)"/>'
+    + '<ellipse cx="24" cy="24" rx="20" ry="7" transform="rotate(120 24 24)"/><circle cx="24" cy="24" r="2.5" fill="currentColor"/>',
+  benzene: '<path d="M24 6l15.6 9v18L24 42 8.4 33V15z"/><circle cx="24" cy="24" r="9"/>',
+  dna: '<path d="M14 4c0 14 20 14 20 20s-20 6-20 20M34 4c0 14-20 14-20 20s20 6 20 20M18 10h12M18 38h12"/>',
+  circuit: '<path d="M8 40h10l8-8V14h12"/><circle cx="6" cy="40" r="2"/><circle cx="40" cy="14" r="2"/><circle cx="26" cy="32" r="1.5" fill="currentColor"/>',
+  capacitor: '<path d="M4 24h16M28 24h16M20 12v24M28 12v24"/>',
+  opamp: '<path d="M12 8v32l28-16zM4 16h8M4 32h8M40 24h6M16 16h4M18 14v4M16 32h4"/>',
+  integral: '<path d="M30 6c-6-2-8 2-8 8v20c0 6-2 10-8 8"/>'
+};
+const DECO = {
+  left: [
+    ["gear", 6, 35, 52, "blue", 0, true], ["wave", 17, 55, 56, "teal", -10], ["atom", 29, 30, 48, "coral", 15],
+    ["resistor", 42, 50, 56, "gold", -20], ["benzene", 55, 35, 44, "teal", 10], ["integral", 67, 55, 40, "blue", 0],
+    ["circuit", 80, 35, 48, "coral", 0], ["dna", 92, 50, 44, "gold", 20]
+  ],
+  right: [
+    ["benzene", 9, 50, 40, "gold", 0], ["opamp", 21, 35, 48, "blue", -8], ["dna", 33, 55, 48, "teal", -15],
+    ["gear", 46, 40, 44, "coral", 10, true], ["capacitor", 58, 55, 44, "blue", 30], ["wave", 71, 35, 52, "gold", 12],
+    ["atom", 84, 55, 44, "teal", -20]
+  ]
+};
+Object.entries(DECO).forEach(([side, items]) => {
+  const col = document.querySelector(".deco-side." + side);
+  items.forEach(([shape, top, x, size, color, rot, spin]) => {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 48 48");
+    svg.setAttribute("width", size); svg.setAttribute("height", size);
+    svg.innerHTML = SHAPES[shape];
+    if (spin) svg.classList.add("spin");
+    svg.style.cssText = `top:${top}%;left:${x}%;color:var(--deco-${color});--rot:${rot}deg`;
+    col.appendChild(svg);
+  });
 });
 
 /* --- pop-up --- */
