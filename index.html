@@ -35,20 +35,18 @@
   img { max-width: 100%; display: block; }
   body { position: relative; }
 
-  /* decorative engineering/science shapes in the side margins (wide screens only) */
-  :root { --deco-blue: var(--accent); --deco-gold: #e0a91b; --deco-coral: #f26b5b; --deco-teal: #14b8a6; --deco-opacity: .5; }
-  @media (prefers-color-scheme: dark) { :root { --deco-opacity: .4; } }
+  /* side margins: a light bar on each side with evenly spaced engineering/science icons (wide screens only) */
+  :root { --deco-opacity: .75; }
+  @media (prefers-color-scheme: dark) { :root { --deco-opacity: .6; } }
   .deco { position: absolute; inset: 0; pointer-events: none; overflow: hidden; display: none; }
   .deco-side { position: absolute; top: 0; bottom: 0; width: calc((100% - 1100px) / 2); }
   .deco-side.left { left: 0; }
   .deco-side.right { right: 0; }
-  .deco svg {
-    position: absolute; transform: translate(-50%, -50%) rotate(var(--rot));
-    opacity: var(--deco-opacity); fill: none; stroke: currentColor;
-    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  .deco-bar {
+    position: absolute; top: 96px; bottom: 96px; left: 50%; width: 52px; transform: translateX(-50%);
+    border-radius: 26px; background: var(--soft);
   }
-  .deco svg.spin { animation: deco-spin 80s linear infinite; }
-  @keyframes deco-spin { to { transform: translate(-50%, -50%) rotate(calc(var(--rot) + 360deg)); } }
+  .deco-icons { position: absolute; inset: 18px 0; opacity: var(--deco-opacity); background-repeat: repeat-y; background-position: center top; }
   @media (min-width: 1260px) { .deco { display: block; } }
 
   .wrap { max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 56px); }
@@ -110,6 +108,7 @@
   section.block { padding: clamp(40px, 8vh, 72px) 0; border-top: 1px solid var(--line); }
   h2.section-title { font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 500; letter-spacing: -0.025em; margin-bottom: 28px; }
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2.5vw, 28px); }
+  .grid.three { grid-template-columns: repeat(3, 1fr); }
 
   /* cards */
   .card {
@@ -125,7 +124,7 @@
   .card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
   .card-title { font-size: 1.25rem; font-weight: 500; letter-spacing: -0.015em; line-height: 1.25; }
   .meta { font-size: .9rem; color: var(--muted); }
-  .summary { color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .summary { color: var(--muted); display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
   .more { margin-top: auto; padding-top: 4px; font-size: .9rem; color: var(--accent); }
 
   /* modal */
@@ -148,8 +147,13 @@
   .modal-close button:focus-visible { outline: 2px solid var(--accent); }
   #modal-title { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 500; letter-spacing: -0.025em; line-height: 1.15; }
   .modal-inner .meta { margin-top: 6px; }
-  .modal-inner .meta a { color: var(--ink); border-bottom: 1px solid var(--accent); }
-  .modal-inner .meta a:hover { color: var(--accent); }
+  .modal-inner .meta a, .details a, .section a { color: var(--ink); border-bottom: 1px solid var(--accent); }
+  .modal-inner .meta a:hover, .details a:hover, .section a:hover { color: var(--accent); }
+  .section { margin-top: 30px; }
+  .section h3 { font-size: .85rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10px; }
+  .section p + p { margin-top: 12px; }
+  .section ol { margin-top: 12px; padding-left: 1.4em; display: flex; flex-direction: column; gap: 8px; }
+  .section .media { margin-top: 18px; }
   .modal-inner .chips, .modal-inner .awards { margin-top: 14px; }
   .details { margin-top: 22px; display: flex; flex-direction: column; gap: 12px; }
   .media { margin-top: 28px; display: flex; flex-direction: column; gap: 24px; }
@@ -172,8 +176,11 @@
 
   footer { padding: 40px 0 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
 
+  @media (max-width: 960px) {
+    .grid.three { grid-template-columns: 1fr 1fr; }
+  }
   @media (max-width: 720px) {
-    .grid { grid-template-columns: 1fr; }
+    .grid, .grid.three { grid-template-columns: 1fr; }
     .profile { grid-template-columns: 1fr; }
     #photo { width: min(100%, 340px); aspect-ratio: 3 / 4; min-height: 0; }
   }
@@ -188,7 +195,10 @@
 </head>
 <body>
 
-<div class="deco" id="deco" aria-hidden="true"><div class="deco-side left"></div><div class="deco-side right"></div></div>
+<div class="deco" id="deco" aria-hidden="true">
+  <div class="deco-side left"><div class="deco-bar"><div class="deco-icons"></div></div></div>
+  <div class="deco-side right"><div class="deco-bar"><div class="deco-icons"></div></div></div>
+</div>
 
 <nav class="nav" aria-label="Sections">
   <div class="wrap">
@@ -219,7 +229,7 @@
   <main>
     <section class="block" id="projects">
       <h2 class="section-title">Technical projects</h2>
-      <div class="grid" id="project-grid"></div>
+      <div class="grid three" id="project-grid"></div>
     </section>
     <section class="block" id="experience">
       <h2 class="section-title">Leadership &amp; volunteering</h2>
@@ -240,15 +250,21 @@
 /* ============================================================
    EDIT THESE BLOCKS ONLY. Everything on the page is generated from them.
 
+   Projects: card shows `cover`, `title`, `subtitle`, `date`, `award` and `summary`.
+   The pop-up shows `tags` (skill tags), then `sections`, each with an optional
+   `heading`, `text` (a string, or a list of paragraphs), an optional numbered `list`,
+   and optional `media` shown under the text.
+   Leadership entries use `details` (a list of paragraphs) and `media` instead of sections.
+
    Media items: { type: "image" | "video" | "pdf", url: "...", caption: "..." }
    - Google Drive links work for all three (share as "Anyone with the link").
-   - YouTube links work for video.
+   - YouTube links work for video. Google Docs links work for "pdf".
    - Plain image URLs or repo paths (e.g. "images/robot.jpg") work for images.
-   - Google Docs links work for "pdf" too.
+   - `rotate` (images only): 90 or -90 to turn a sideways photo.
+   - `link` (optional): adds a link to the file in the caption, e.g. "Open full poster ↗".
    Card cover: set `cover`, otherwise the first media item's thumbnail is used.
-   Media `rotate` (optional, images only): 90 or -90 to turn a sideways photo.
    `award` (optional): a string or a list of strings, shown as gold badges.
-   `subtitleUrl` (optional): makes the subtitle a link in the pop-up.
+   In any text: [label](https://...) makes a link, **text** makes bold.
    `skills`: groups of tags, as { "Group name": ["Skill", ...] }.
    ============================================================ */
 const SITE = {
@@ -275,16 +291,41 @@ const SITE = {
 const PROJECTS = [
   {
     title: "Autonomous Robotic Needle Steering System",
-    subtitle: "MSc Dissertation · Bristol Robotics Laboratory",
+    subtitle: "MSc Dissertation · [Bristol Robotics Laboratory](https://www.bristolroboticslab.com/)",
     date: "Jan – Sept 2026",
     award: "Best Communicated Dissertation 2026",
-    summary: "Real-time closed-loop system to autonomously steer a needle during prostate radiotherapy.",
-    tags: [],
-    details: [],
+    summary: "A real-time autonomous needle-steering robot for prostate radiotherapy applications.",
+    tags: ["ROS2", "Python", "Linux", "Git", "KUKA", "Research", "Technical Writing"],
     cover: "https://drive.google.com/file/d/1dPs6cmkKU1_GoVij9eFz93GlLlr8hUO3/view?usp=sharing",
-    media: [
-      { type: "video", url: "https://drive.google.com/file/d/1vPcwTd98-z-6N8gnB6Q3EB4LylGAq8WA/view?usp=sharing", caption: "Demo" },
-      { type: "pdf",   url: "https://drive.google.com/file/d/172BSIv56dFKf0FIgW6fHW8mmRocKr61u/view?usp=sharing", caption: "Dissertation" }
+    sections: [
+      {
+        heading: "Problem Scope",
+        text: "For my 8-month MSc Dissertation, I focussed on evaluating 2 leading controls algorithms for steering a needle through the perirectal space to administer a hydrogel spacer in patients receiving prostate radiotherapy. The following video highlights the problem scope and main contribution of the dissertation:",
+        media: [
+          { type: "video", url: "https://drive.google.com/file/d/1vPcwTd98-z-6N8gnB6Q3EB4LylGAq8WA/view?usp=sharing", caption: "Video submission" }
+        ]
+      },
+      {
+        heading: "System Architecture",
+        text: "The main technical contribution of the project is a full ROS2 ecosystem, programmed in Ubuntu 22.04 using Python and managed using Git. The following diagram shows the nodes assigned to key functions of the comprehensive system. The key nodes/contributions are as follows:",
+        list: [
+          "**Path Planner:** Used the unicycle model to kinematically model needle-steering in a soft-tissue environment, and mathematically modelled the prostate and rectum to test various patient anatomies. From the specified entry and target points, this node generates a reference path for the control system to follow.",
+          "**Controller:** Implemented and evaluated two leading controls algorithms, Sliding-Mode Control and Model-Predictive Control with enhanced Control Barrier Functions, and compared their performance across various evaluation metrics to determine the best algorithm for this application.",
+          "**Live Window:** Generates a live window showing the control output of each algorithm using Matplotlib.",
+          "**Robot Arm:** Once the simulation was verified, inverse dynamics were applied to calibrate and move an industrial KUKA LBR robot arm equipped with a needle to follow the simulation.",
+          "**Ultrasound:** A BK Medical FlexForce 500 Trans-Rectal Ultrasound was used to visualize the needle insertion while in the gelatine phantom."
+        ],
+        media: [
+          { type: "image", url: "https://drive.google.com/file/d/1QvZIa1PC0M070KDHTbgN8Q436LcieusJ/view?usp=sharing", caption: "ROS2 architecture" }
+        ]
+      },
+      {
+        heading: "Dissertation Paper",
+        text: "To present my research, I wrote a 10-page conference-style paper shown below.",
+        media: [
+          { type: "pdf", url: "https://drive.google.com/file/d/172BSIv56dFKf0FIgW6fHW8mmRocKr61u/view?usp=sharing", caption: "Dissertation" }
+        ]
+      }
     ],
     links: []
   },
@@ -294,31 +335,75 @@ const PROJECTS = [
     date: "Sept 2024 – Apr 2025",
     award: "Grad to Watch",
     summary: "Designed and built a wearable sensing glove that captures and interprets muscle-force data for physicians during in-clinic muscle testing.",
-    tags: [],
-    details: [],
-    cover: "https://drive.google.com/file/d/12GCYL94Wsc7r--jXrxWNgEmL6-QpV6fW/view?usp=sharing",
-    media: [
-      { type: "video", url: "https://drive.google.com/file/d/1bbLFaNKDhLKlz4NbwfqiaK8TCZW0WIVg/view?usp=sharing" },
-      { type: "image", url: "https://drive.google.com/file/d/1LAY2Yfz3ZfD8EHsWT_QfceWrsF8QPyTO/view?usp=sharing", rotate: 90 },
-      { type: "image", url: "https://drive.google.com/file/d/1pZfhDSRyjPq5zGO4ZSeJJYazaShOr7Mx/view?usp=sharing", rotate: 90 },
-      { type: "image", url: "https://drive.google.com/file/d/1ttJvNUjAj6olzF6f5swZGXMEok4MrJgs/view?usp=sharing" },
-      { type: "pdf",   url: "https://drive.google.com/file/d/1S0c6G8e1B4CSPhrEO2dz7o2vp-zb193J/view?usp=sharing", caption: "Capstone report" }
+    tags: ["Python", "PCB", "Product Design", "Project Management", "Technical Writing"],
+    cover: "https://drive.google.com/file/d/1ttJvNUjAj6olzF6f5swZGXMEok4MrJgs/view?usp=sharing",
+    sections: [
+      {
+        heading: "Problem Scope",
+        text: "For my 8-month Capstone project, we worked with a physician to create an accurate, quantifiable way of recording patient’s muscle strengths to track and diagnose neuromuscular disorders, following the Oxford Muscle Scale. The following video highlights the problem scope and contributions of the project, with a brief demo of functionality.",
+        media: [
+          { type: "video", url: "https://drive.google.com/file/d/1bbLFaNKDhLKlz4NbwfqiaK8TCZW0WIVg/view?usp=sharing" }
+        ]
+      },
+      {
+        heading: "Final Prototype",
+        text: "Our solution was to make gloves equipped with FlexiForce force sensors that could ascertain muscle strength based on force applied at the finger and palms of the gloves. All other components, including a custom-built PCB, 3D-printed housing, and batteries, would be comfortably stored in the forearm sleeve. The gloves connected to an interactive UI programmed in Python using the Tkinter library that would serve as a database of patient testing history to view trends over time. The images below show labelled images of the built prototype.",
+        media: [
+          { type: "image", url: "https://drive.google.com/file/d/1LAY2Yfz3ZfD8EHsWT_QfceWrsF8QPyTO/view?usp=sharing", rotate: 90 },
+          { type: "image", url: "https://drive.google.com/file/d/1pZfhDSRyjPq5zGO4ZSeJJYazaShOr7Mx/view?usp=sharing", rotate: 90 }
+        ]
+      },
+      {
+        heading: "Poster Presentation",
+        text: "We presented our research to 200+ attendees of the 2025 Capstone Expo, supported by the poster board shown below:",
+        media: [
+          { type: "image", url: "https://drive.google.com/file/d/12GCYL94Wsc7r--jXrxWNgEmL6-QpV6fW/view?usp=sharing", link: "Open full poster ↗" }
+        ]
+      },
+      {
+        heading: "Capstone Report",
+        text: "This extensive report documents the entire design process from problem definition to solution, with all design inputs and outputs accounted for.",
+        media: [
+          { type: "pdf", url: "https://drive.google.com/file/d/1S0c6G8e1B4CSPhrEO2dz7o2vp-zb193J/view?usp=sharing", caption: "Capstone report" }
+        ]
+      }
     ],
     links: []
   },
   {
     title: "Autonomous Competitive Sumobot",
-    subtitle: "McMaster Sumobot Competition",
-    subtitleUrl: "https://www.sumobot.ca/",
+    subtitle: "[McMaster Sumobot Competition](https://www.sumobot.ca/)",
     date: "Sept 2024 – Apr 2025",
     award: "Top 4 in University, Top 8 in Provincials",
-    summary: "Autonomous competitive sumobot built to a maximum of 10 cm × 10 cm and under 500 g.",
-    tags: [],
-    details: [],
+    summary: "An autonomous, competitive sumobot designed to identify and push other bots out of the ring in under 1 minute.",
+    tags: ["Hardware", "CAD", "Python", "Embedded Systems", "Project Design", "Strategic Design"],
     cover: "https://drive.google.com/file/d/1x8HD4vokp5e1qGgzq5rRkKgqa1DfgWT7/view?usp=sharing",
-    media: [
-      { type: "video", url: "https://drive.google.com/file/d/1LhmIECRRHSK9SymXpvE2y92HuAdvdtAF/view?usp=sharing", caption: "Match footage" },
-      { type: "image", url: "https://drive.google.com/file/d/1dqQDs29JoPU_jLvAZK07F-65Q2qh7LLd/view?usp=sharing" }
+    sections: [
+      {
+        text: "The McMaster Sumobots Competition is an annual competition in which teams design, program, and build fully-autonomous robots to compete in a tournament. The robots are placed in a ring and have 1 minute to push the other robot out of the ring to earn points and progress in the tournament. The restrictions for robots in this category are: maximum 10cm x 10cm and 500g weight limit."
+      },
+      {
+        heading: "Strategy",
+        text: "Our strategy surrounded taking advantage of a low centre-of-gravity and quick sensor readings to implement a proactive “global search” strategy, wherein the bot quickly moves around the ring looking for an opponent to latch onto. By implementing a wedged “skirt” at the bottom, the bot is able to scoop up other bots to gain leverage to push them out, and it’s hard for other bots to gain the same advantage. Maximizing the weight to the 500g limit using coins also made the bot much harder to push around. The following videos show the strategy working in the ring:",
+        media: [
+          { type: "video", url: "https://drive.google.com/file/d/1LhmIECRRHSK9SymXpvE2y92HuAdvdtAF/view?usp=sharing", caption: "Match footage" },
+          { type: "video", url: "https://drive.google.com/file/d/1Ltz2LMkvNsOHgK--4uMg2dIRd8N8cfRg/view?usp=sharing" }
+        ]
+      },
+      {
+        heading: "Hardware",
+        text: "The electrical schematic takes into consideration component size and power supply - an Arduino Nano was able to supply all components, while 2 IR sensors at the bottom detect the white border of the ring and the US sensor at the front detects an opponent bot. The image below shows the electrical wiring of components used.",
+        media: [
+          { type: "image", url: "https://drive.google.com/file/d/1dqQDs29JoPU_jLvAZK07F-65Q2qh7LLd/view?usp=sharing" }
+        ]
+      },
+      {
+        heading: "CAD",
+        text: "Extensive consideration had to be put into making the CAD design as compact as possible while still having space for all components and crucially, wires. After several iterations, the following CAD design was modelled and used for the final bot:",
+        media: [
+          { type: "image", url: "https://drive.google.com/file/d/1ymDUI5XX7ilMK47hsHjIJ-byk5v20PA-/view?usp=sharing", caption: "CAD design" }
+        ]
+      }
     ],
     links: []
   },
@@ -326,13 +411,35 @@ const PROJECTS = [
     title: "Leader-Follower Robotic System",
     subtitle: "Robotic Science and Systems (course)",
     date: "Sept – Dec 2025",
-    summary: "Evaluated the performance of a single- versus dual-emitter IR leader-follower robotic system using Raspberry Pi 3 robots.",
-    tags: [],
-    details: [],
+    summary: "A comparative study of single- vs. dual-emitter infrared sensing for distance tracking in a PID-controlled leader-follower robot system.",
+    tags: ["Embedded Systems", "Control Systems (PID)", "Sensor Calibration", "Signal Processing", "Data Analysis", "Robotics", "Scientific Writing"],
     cover: "https://drive.google.com/file/d/1Sd2nxs12P8AIEp_7JMLd_8kE4T7oQBFa/view?usp=sharing",
-    media: [
-      { type: "image", url: "https://drive.google.com/file/d/1iDoZ9xxXfxfwIWMndVLwbXzb8FbY2o2A/view?usp=sharing" },
-      { type: "pdf",   url: "https://drive.google.com/file/d/1jvAatO4Tai_snKUVM5X4d-uUdC_vWoPN/view?usp=sharing", caption: "Paper" }
+    sections: [
+      {
+        text: "Leader-follower control usually relies on expensive sensing (LiDAR, vision, ultrasonic). Using two Pololu 3Pi+ 32U4 robots, we tested whether cheap infrared emitter-receiver pairs could drive reliable distance tracking — comparing a single-emission setup (only the leader emits IR) against a dual-emission one (both emit, to filter noise). We hypothesized dual would be more robust; the results proved the opposite.",
+        media: [
+          { type: "image", url: "https://drive.google.com/file/d/1iDoZ9xxXfxfwIWMndVLwbXzb8FbY2o2A/view?usp=sharing" }
+        ]
+      },
+      {
+        heading: "Sensing & Calibration",
+        text: "The 3Pi+ reads IR through two channels: a 10-bit analog (ADC) channel and a digital (DAC) channel that times a capacitor discharge. We calibrated both against true distance and selected the analog channel for its lower noise and linear response, placing the setpoint (~25 mm) in its most linear region."
+      },
+      {
+        heading: "Control System",
+        text: "The follower runs a nested PID architecture — a distance controller sets base velocity, a heading controller holds orientation, and left/right wheel controllers synchronize the motors. To transfer control between two non-identical robots, we calibrated each one’s wheel separation and radius, then tuned each loop empirically."
+      },
+      {
+        heading: "Experiment & Results",
+        text: "Crossing two emission modes with three motion patterns (constant, start-stop, forward-back), run ten times each, gave 60 trials, scored by integral absolute error (IAE). Across all cases, single-emission produced lower error and more stable control: dual-emission raised baseline illumination, saturating the sensors early and compressing their usable range. The takeaway — for small robots with limited hardware, minimal IR emission tracks distance more dependably than a more complex dual-source design."
+      },
+      {
+        heading: "Report",
+        text: "A professional, conference-style research paper was written to document the project, shown below.",
+        media: [
+          { type: "pdf", url: "https://drive.google.com/file/d/1jvAatO4Tai_snKUVM5X4d-uUdC_vWoPN/view?usp=sharing", caption: "Paper" }
+        ]
+      }
     ],
     links: []
   },
@@ -341,13 +448,36 @@ const PROJECTS = [
     subtitle: "Microprocessor Systems Project (course)",
     date: "Jan – Apr 2022",
     award: "Grade: A+",
-    summary: "Autonomous robot that maps its surrounding environment.",
-    tags: [],
-    details: [],
-    media: [
-      { type: "image", url: "https://drive.google.com/file/d/10wpkSv9zVfdhCtCElrzm88cmAepqexcn/view?usp=sharing" },
-      { type: "video", url: "https://drive.google.com/file/d/1CM3Itgc0AjKyjn7UVOLWTmyb2hmGNCXE/view?usp=sharing", caption: "Demo" },
-      { type: "pdf",   url: "https://drive.google.com/file/d/1QAWx2gcCuobVXOZZjDoMlywp-kMDwjCc/view?usp=sharing", caption: "Project report" }
+    summary: "A portable spatial-mapping device that scans its surroundings with a time-of-flight sensor and reconstructs them as a 3D point cloud.",
+    tags: ["Embedded Systems", "C", "Python", "I²C & UART", "Sensor Integration", "3D Visualization", "CAD"],
+    sections: [
+      {
+        text: "A low-cost LiDAR-style scanner that maps a hallway in 3D. A VL53L0X time-of-flight sensor, mounted on a stepper motor via a custom 3D-printed bracket, sweeps a full rotation on each button press — pausing every 11.25° (36 readings/revolution) to measure distance to the nearest surface. Advanced slowly forward over five revolutions, it captures enough cross-sectional slices to reconstruct the space."
+      },
+      {
+        heading: "Hardware & Sensing",
+        text: "A VL53L0X ToF sensor (940 nm laser, 4 m range) is driven over I²C by a TI MSP-EXP432E401Y microcontroller (Arm Cortex-M4F @ 80 MHz), with a stepper motor giving 11.25° resolution. The sensor measures distance by timing an IR pulse’s round trip (d = c·t / 2), and a custom 3D-printed mount couples it to the motor shaft.",
+        media: [
+          { type: "image", url: "https://drive.google.com/file/d/10wpkSv9zVfdhCtCElrzm88cmAepqexcn/view?usp=sharing", caption: "Device setup" }
+        ]
+      },
+      {
+        heading: "Firmware & Acquisition",
+        text: "Firmware written in C (flashed via Keil µVision) boots the sensor over I²C, then steps the motor, triggers each ranging measurement, and streams readings to the PC over UART at 115200 baud — 160 points per scan, with a fast reverse rotation between revolutions to prevent wire tangling.",
+        media: [
+          { type: "video", url: "https://drive.google.com/file/d/1CM3Itgc0AjKyjn7UVOLWTmyb2hmGNCXE/view?usp=sharing", caption: "Demo" }
+        ]
+      },
+      {
+        heading: "Processing & Reconstruction",
+        text: "A Python program reads the UART stream with pyserial and converts each reading into a 3D coordinate: the distance is the hypotenuse and the rotation angle the known angle, so trigonometry yields y and z (y = d·cos θ, z = d·sin θ) while x tracks forward progress. The point cloud is rendered in 3D with matplotlib’s Axes3D."
+      },
+      {
+        heading: "Project Report",
+        media: [
+          { type: "pdf", url: "https://drive.google.com/file/d/1QAWx2gcCuobVXOZZjDoMlywp-kMDwjCc/view?usp=sharing", caption: "Project report" }
+        ]
+      }
     ],
     links: []
   },
@@ -355,13 +485,27 @@ const PROJECTS = [
     title: "Motorized Prosthetic Hand",
     subtitle: "McMaster Medical Engineering Design Team (MED-T)",
     date: "Sept 2022 – Apr 2023",
-    summary: "Collected muscle contraction data for the software sub-team of a motorized prosthetic hand, and wrote an extensive guide to filtering EMG signals for future sub-team members.",
-    tags: [],
-    details: [],
-    media: [
-      { type: "image", url: "https://drive.google.com/file/d/1lFhrJhPjsEgquyI54kl1tFlVO-bKcSXY/view?usp=sharing" },
-      { type: "video", url: "https://drive.google.com/file/d/1Ns2-RKEFF8uo-azf6aX85ydcji3HiokD/view?usp=sharing" },
-      { type: "pdf",   url: "https://docs.google.com/document/d/17GQfiK8Mi8lVD5p3hvJ5owsHCLwbuF_1KxIGaQchMDc/edit?usp=sharing", caption: "EMG filtering guide" }
+    summary: "A motorized prosthetic hand driven by forearm muscle activity, where I built the pipeline that turns raw EMG into a clean control signal.",
+    tags: ["Signal Processing", "Python", "Biosignals (EMG)", "Digital Filtering", "Data Analysis"],
+    cover: "https://drive.google.com/file/d/1lFhrJhPjsEgquyI54kl1tFlVO-bKcSXY/view?usp=sharing",
+    sections: [
+      {
+        text: "The hand is actuated by its wearer’s own muscles: surface EMG electrodes on the forearm capture the electrical activity of muscle contractions, which is processed into a smooth control signal that drives the hand’s motors. I owned the signal-processing side — designing and documenting the pipeline that converts noisy, raw EMG into a clean, usable envelope.",
+        media: [
+          { type: "video", url: "https://drive.google.com/file/d/1Ns2-RKEFF8uo-azf6aX85ydcji3HiokD/view?usp=sharing", caption: "Collecting EMG forearm data" }
+        ]
+      },
+      {
+        heading: "Signal Pipeline",
+        text: "Starting from a MyoWare sensor’s differential output (which rejects common-mode noise), the pipeline removes the DC offset from electrode half-cell potentials, then applies an 8th-order Butterworth bandpass (~10–400 Hz) to strip low-frequency drift and sweat artifacts along with high-frequency noise. A 60 Hz notch filter handles mains interference when a spectral peak is present. The signal is then full-wave rectified and passed through a low-cutoff (3 Hz) Butterworth lowpass to extract the linear envelope — the smooth amplitude trace the hand uses to decide when and how to actuate."
+      },
+      {
+        heading: "Implementation",
+        text: "I implemented and validated the pipeline in Python, using time-domain and FFT views to tune filter cutoffs against real recordings and verify noise sources (e.g., confirming when the 60 Hz notch could be skipped). I chose Butterworth filters for their flat passband and documented the full process as a guide for the software sub-team to build on.",
+        media: [
+          { type: "pdf", url: "https://docs.google.com/document/d/17GQfiK8Mi8lVD5p3hvJ5owsHCLwbuF_1KxIGaQchMDc/edit?usp=sharing", caption: "EMG filtering guide" }
+        ]
+      }
     ],
     links: [{ label: "MED-T", url: "https://www.macmed-t.com/" }]
   }
@@ -424,6 +568,21 @@ const chips = (list) => {
   return c;
 };
 
+// Inline formatting in text: [label](url) makes a link, **text** makes bold.
+const INLINE = /\[([^\]]+)\]\(([^)\s]+)\)|\*\*(.+?)\*\*/g;
+function rich(text) {
+  const frag = document.createDocumentFragment();
+  let last = 0;
+  for (const m of text.matchAll(INLINE)) {
+    frag.append(text.slice(last, m.index));
+    frag.append(m[1] ? extLink(m[1], m[2]) : el("strong", null, m[3]));
+    last = m.index + m[0].length;
+  }
+  frag.append(text.slice(last));
+  return frag;
+}
+const plain = (text) => text.replace(INLINE, (_, label, url, bold) => label || bold);
+
 const TROPHY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3"/></svg>';
 const awards = (item) => {
   const list = [].concat(item.award || []);
@@ -479,6 +638,7 @@ function mediaNode(m) {
   const cap = el("figcaption");
   if (m.caption) cap.appendChild(el("span", null, m.caption));
   if (m.type === "pdf") cap.appendChild(extLink(g ? "Open document ↗" : "Open PDF ↗", m.url));
+  if (m.link) cap.appendChild(extLink(m.link, m.url));
   if (cap.childNodes.length) fig.appendChild(cap);
   return fig;
 }
@@ -488,7 +648,7 @@ document.title = SITE.name + " — Portfolio";
 $("nav-name").textContent = SITE.name;
 $("name").textContent = SITE.name;
 $("tagline").textContent = SITE.tagline;
-$("bio").textContent = SITE.bio;
+$("bio").append(rich(SITE.bio));
 if (SITE.photo) {
   const img = el("img", "photo"); img.src = imageSrc(SITE.photo, 1600); img.alt = SITE.name;
   if (SITE.photoPosition) img.style.objectPosition = SITE.photoPosition;
@@ -519,11 +679,10 @@ function card(item) {
   }
   const body = el("div", "card-body");
   body.appendChild(el("h3", "card-title", item.title));
-  const meta = [item.subtitle, item.date].filter(Boolean).join(" · ");
+  const meta = [item.subtitle && plain(item.subtitle), item.date].filter(Boolean).join(" · ");
   if (meta) body.appendChild(el("p", "meta", meta));
   if (awards(item)) body.appendChild(awards(item));
   if (item.summary) body.appendChild(el("p", "summary", item.summary));
-  if (item.tags && item.tags.length) body.appendChild(chips(item.tags));
   body.appendChild(el("span", "more", "Details →"));
   b.append(cover, body);
   b.addEventListener("click", () => openItem(item));
@@ -552,33 +711,42 @@ const SHAPES = {
   opamp: '<path d="M12 8v32l28-16zM4 16h8M4 32h8M40 24h6M16 16h4M18 14v4M16 32h4"/>',
   integral: '<path d="M30 6c-6-2-8 2-8 8v20c0 6-2 10-8 8"/>'
 };
-const DECO = {
-  left: [
-    ["gear", 6, 35, 52, "blue", 0, true], ["wave", 17, 55, 56, "teal", -10], ["atom", 29, 30, 48, "coral", 15],
-    ["resistor", 42, 50, 56, "gold", -20], ["benzene", 55, 35, 44, "teal", 10], ["integral", 67, 55, 40, "blue", 0],
-    ["circuit", 80, 35, 48, "coral", 0], ["dna", 92, 50, 44, "gold", 20]
-  ],
-  right: [
-    ["benzene", 9, 50, 40, "gold", 0], ["opamp", 21, 35, 48, "blue", -8], ["dna", 33, 55, 48, "teal", -15],
-    ["gear", 46, 40, 44, "coral", 10, true], ["capacitor", 58, 55, 44, "blue", 30], ["wave", 71, 35, 52, "gold", 12],
-    ["atom", 84, 55, 44, "teal", -20]
-  ]
-};
-Object.entries(DECO).forEach(([side, items]) => {
-  const col = document.querySelector(".deco-side." + side);
-  items.forEach(([shape, top, x, size, color, rot, spin]) => {
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 48 48");
-    svg.setAttribute("width", size); svg.setAttribute("height", size);
-    svg.innerHTML = SHAPES[shape];
-    if (spin) svg.classList.add("spin");
-    svg.style.cssText = `top:${top}%;left:${x}%;color:var(--deco-${color});--rot:${rot}deg`;
-    col.appendChild(svg);
-  });
-});
+// one repeating column of icons per bar: same size, same spacing, colours in a fixed cycle
+const DECO_ORDER = ["gear", "wave", "atom", "resistor", "benzene", "integral", "circuit", "dna", "capacitor", "opamp"];
+const DECO_COLORS = ["#2d4bff", "#14b8a6", "#f26b5b", "#e0a91b"];
+function decoTile(offset) {
+  const W = 52, STEP = 112, SIZE = 26;
+  const icons = DECO_ORDER.map((_, i) => {
+    const shape = DECO_ORDER[(i + offset) % DECO_ORDER.length];
+    const color = DECO_COLORS[(i + offset) % DECO_COLORS.length];
+    return `<g color="${color}" transform="translate(${(W - SIZE) / 2} ${i * STEP + (STEP - SIZE) / 2}) scale(${SIZE / 48})">${SHAPES[shape]}</g>`;
+  }).join("");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${DECO_ORDER.length * STEP}" fill="none" stroke="currentColor"`
+    + ` stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">${icons}</svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+document.querySelectorAll(".deco-icons").forEach((n, i) => { n.style.backgroundImage = decoTile(i * 5); });
 
 /* --- pop-up --- */
 const modal = $("modal");
+function mediaList(list) {
+  const media = el("div", "media");
+  list.forEach((m) => media.appendChild(mediaNode(m)));
+  return media;
+}
+// A section: optional heading, then paragraphs, then an optional numbered list, then media.
+function sectionNode(sec) {
+  const node = el("div", "section");
+  if (sec.heading) node.appendChild(el("h3", null, sec.heading));
+  [].concat(sec.text || []).forEach((t) => { const para = el("p"); para.append(rich(t)); node.appendChild(para); });
+  if (sec.list && sec.list.length) {
+    const ol = el("ol");
+    sec.list.forEach((t) => { const li = el("li"); li.append(rich(t)); ol.appendChild(li); });
+    node.appendChild(ol);
+  }
+  if (sec.media && sec.media.length) node.appendChild(mediaList(sec.media));
+  return node;
+}
 function openItem(item) {
   const body = $("modal-body");
   body.replaceChildren();
@@ -586,21 +754,21 @@ function openItem(item) {
   body.appendChild(h);
   if (item.subtitle || item.date) {
     const meta = el("p", "meta");
-    if (item.subtitle) meta.append(item.subtitleUrl ? extLink(item.subtitle, item.subtitleUrl) : item.subtitle);
+    if (item.subtitle) meta.append(rich(item.subtitle));
     if (item.subtitle && item.date) meta.append(" · ");
     if (item.date) meta.append(item.date);
     body.appendChild(meta);
   }
   if (awards(item)) body.appendChild(awards(item));
   if (item.tags && item.tags.length) body.appendChild(chips(item.tags));
-  const details = el("div", "details");
-  (item.details && item.details.length ? item.details : [item.summary]).filter(Boolean)
-    .forEach((p) => details.appendChild(el("p", null, p)));
-  body.appendChild(details);
-  if (item.media && item.media.length) {
-    const media = el("div", "media");
-    item.media.forEach((m) => media.appendChild(mediaNode(m)));
-    body.appendChild(media);
+  if (item.sections && item.sections.length) {
+    item.sections.forEach((sec) => body.appendChild(sectionNode(sec)));
+  } else {
+    const details = el("div", "details");
+    (item.details && item.details.length ? item.details : [item.summary]).filter(Boolean)
+      .forEach((p) => { const para = el("p"); para.append(rich(p)); details.appendChild(para); });
+    body.appendChild(details);
+    if (item.media && item.media.length) body.appendChild(mediaList(item.media));
   }
   if (item.links && item.links.length) {
     const links = el("div", "modal-links");
