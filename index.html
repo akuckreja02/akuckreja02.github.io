@@ -35,18 +35,31 @@
   img { max-width: 100%; display: block; }
   body { position: relative; }
 
-  /* side margins: a light bar on each side with evenly spaced engineering/science icons (wide screens only) */
-  :root { --deco-opacity: .75; }
-  @media (prefers-color-scheme: dark) { :root { --deco-opacity: .6; } }
-  .deco { position: absolute; inset: 0; pointer-events: none; overflow: hidden; display: none; }
-  .deco-side { position: absolute; top: 0; bottom: 0; width: calc((100% - 1100px) / 2); }
-  .deco-side.left { left: 0; }
-  .deco-side.right { right: 0; }
-  .deco-bar {
-    position: absolute; top: 96px; bottom: 96px; left: 50%; width: 52px; transform: translateX(-50%);
-    border-radius: 26px; background: var(--soft);
+  /* side margins (wide screens only): faint engineering graph paper with a drafting-ruler edge */
+  :root {
+    --grid-minor: color-mix(in srgb, var(--accent) 6%, transparent);
+    --grid-major: color-mix(in srgb, var(--accent) 13%, transparent);
+    --tick: color-mix(in srgb, var(--accent) 32%, transparent);
   }
-  .deco-icons { position: absolute; inset: 18px 0; opacity: var(--deco-opacity); background-repeat: repeat-y; background-position: center top; }
+  .deco { position: absolute; inset: 0; pointer-events: none; overflow: hidden; display: none; }
+  .deco-side {
+    position: absolute; top: 0; bottom: 0; width: calc((100% - 1100px) / 2);
+    background-image:
+      linear-gradient(var(--grid-major) 1px, transparent 1px), linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+      linear-gradient(var(--grid-minor) 1px, transparent 1px), linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
+    background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+  }
+  .deco-side::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 14px; background-repeat: no-repeat;
+    background-image:
+      repeating-linear-gradient(to bottom, var(--tick) 0 1px, transparent 1px 80px),
+      repeating-linear-gradient(to bottom, var(--tick) 0 1px, transparent 1px 16px);
+    background-size: 14px 100%, 7px 100%;
+  }
+  .deco-side.left { left: 0; background-position: right top; -webkit-mask-image: linear-gradient(to left, #000 30%, transparent); mask-image: linear-gradient(to left, #000 30%, transparent); }
+  .deco-side.left::after { right: 0; border-right: 1px solid var(--tick); background-position: right top, right top; }
+  .deco-side.right { right: 0; background-position: left top; -webkit-mask-image: linear-gradient(to right, #000 30%, transparent); mask-image: linear-gradient(to right, #000 30%, transparent); }
+  .deco-side.right::after { left: 0; border-left: 1px solid var(--tick); background-position: left top, left top; }
   @media (min-width: 1260px) { .deco { display: block; } }
 
   .wrap { max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 56px); }
@@ -88,6 +101,7 @@
 
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chips span { font-size: .85rem; padding: 3px 10px; border-radius: 999px; background: var(--soft); color: var(--muted); }
+  #interests span { color: var(--ink); }
   .awards { display: flex; flex-wrap: wrap; gap: 6px; }
   .awards span {
     display: inline-flex; align-items: center; gap: 5px;
@@ -195,10 +209,7 @@
 </head>
 <body>
 
-<div class="deco" id="deco" aria-hidden="true">
-  <div class="deco-side left"><div class="deco-bar"><div class="deco-icons"></div></div></div>
-  <div class="deco-side right"><div class="deco-bar"><div class="deco-icons"></div></div></div>
-</div>
+<div class="deco" aria-hidden="true"><div class="deco-side left"></div><div class="deco-side right"></div></div>
 
 <nav class="nav" aria-label="Sections">
   <div class="wrap">
@@ -250,7 +261,7 @@
 /* ============================================================
    EDIT THESE BLOCKS ONLY. Everything on the page is generated from them.
 
-   Projects: card shows `cover`, `title`, `subtitle`, `date`, `award` and `summary`.
+   Projects: card shows `cover`, `title`, `subtitle`, `date`, `award`, `stack` (tech chips) and `summary`.
    The pop-up shows `tags` (skill tags), then `sections`, each with an optional
    `heading`, `text` (a string, or a list of paragraphs), an optional numbered `list`,
    and optional `media` shown under the text.
@@ -294,34 +305,31 @@ const PROJECTS = [
     subtitle: "MSc Dissertation · [Bristol Robotics Laboratory](https://www.bristolroboticslab.com/)",
     date: "Jan – Sept 2026",
     award: "Best Communicated Dissertation 2026",
+    stack: ["ROS2", "Python", "MPC", "SMC", "Control Barrier Functions", "KUKA", "Ultrasound Feedback"],
     summary: "A real-time autonomous needle-steering robot for prostate radiotherapy applications.",
     tags: ["ROS2", "Python", "Linux", "Git", "KUKA", "Research", "Technical Writing"],
     cover: "https://drive.google.com/file/d/1dPs6cmkKU1_GoVij9eFz93GlLlr8hUO3/view?usp=sharing",
     sections: [
       {
-        heading: "Problem Scope",
-        text: "For my 8-month MSc Dissertation, I focussed on evaluating 2 leading controls algorithms for steering a needle through the perirectal space to administer a hydrogel spacer in patients receiving prostate radiotherapy. The following video highlights the problem scope and main contribution of the dissertation:",
+        text: "Developed the control system for a robot-assisted needle intervention (RANI) that autonomously inserts a SpaceOAR hydrogel spacer into the perirectal space during prostate radiotherapy — steering a bevel-tip needle through a narrow gap to a single target while never puncturing the prostate or rectum. The problem was treated as 2D steering in the mid-sagittal plane.",
         media: [
           { type: "video", url: "https://drive.google.com/file/d/1vPcwTd98-z-6N8gnB6Q3EB4LylGAq8WA/view?usp=sharing", caption: "Video submission" }
         ]
       },
       {
-        heading: "System Architecture",
-        text: "The main technical contribution of the project is a full ROS2 ecosystem, programmed in Ubuntu 22.04 using Python and managed using Git. The following diagram shows the nodes assigned to key functions of the comprehensive system. The key nodes/contributions are as follows:",
-        list: [
-          "**Path Planner:** Used the unicycle model to kinematically model needle-steering in a soft-tissue environment, and mathematically modelled the prostate and rectum to test various patient anatomies. From the specified entry and target points, this node generates a reference path for the control system to follow.",
-          "**Controller:** Implemented and evaluated two leading controls algorithms, Sliding-Mode Control and Model-Predictive Control with enhanced Control Barrier Functions, and compared their performance across various evaluation metrics to determine the best algorithm for this application.",
-          "**Live Window:** Generates a live window showing the control output of each algorithm using Matplotlib.",
-          "**Robot Arm:** Once the simulation was verified, inverse dynamics were applied to calibrate and move an industrial KUKA LBR robot arm equipped with a needle to follow the simulation.",
-          "**Ultrasound:** A BK Medical FlexForce 500 Trans-Rectal Ultrasound was used to visualize the needle insertion while in the gelatine phantom."
-        ],
+        heading: "Control & Safety",
+        text: "Implemented and benchmarked two closed-loop controllers — Sliding-Mode Control (SMC) and Model Predictive Control (MPC) — each augmented with Control Barrier Functions (CBFs) that enforce a hard safety margin around the organs. A unicycle-model path planner generates a reference trajectory that respects the needle’s curvature limits."
+      },
+      {
+        heading: "Simulation & Hardware",
+        text: "Built a modular ROS2 (Humble) workspace in Python linking path planning, control, and a live Matplotlib simulation — modelling the organs with the Gielis superformula and realistic ultrasound disturbances (Gaussian noise, Ornstein-Uhlenbeck drift, and latency). After 60 simulated trials, the system was integrated with a KUKA LBR iiwa arm and a BK Medical Flex Focus 500 trans-rectal ultrasound.",
         media: [
           { type: "image", url: "https://drive.google.com/file/d/1QvZIa1PC0M070KDHTbgN8Q436LcieusJ/view?usp=sharing", caption: "ROS2 architecture" }
         ]
       },
       {
-        heading: "Dissertation Paper",
-        text: "To present my research, I wrote a 10-page conference-style paper shown below.",
+        heading: "Result",
+        text: "Both controllers achieved sub-millimeter targeting with zero safety-margin violations across all 60 trials; MPC-CBF was the stronger performer, reaching a mean error as low as 0.090 mm with almost no needle reorientations. Awarded Best Communicated Dissertation 2026.",
         media: [
           { type: "pdf", url: "https://drive.google.com/file/d/172BSIv56dFKf0FIgW6fHW8mmRocKr61u/view?usp=sharing", caption: "Dissertation" }
         ]
@@ -334,36 +342,34 @@ const PROJECTS = [
     subtitle: "B.Eng. BME Capstone Project · McMaster University",
     date: "Sept 2024 – Apr 2025",
     award: "Grad to Watch",
+    stack: ["ESP32", "FSR Sensors", "Op-Amp Conditioning", "PCB (EasyEDA)", "Python", "Bluetooth", "3D Printing"],
     summary: "Designed and built a wearable sensing glove that captures and interprets muscle-force data for physicians during in-clinic muscle testing.",
     tags: ["Python", "PCB", "Product Design", "Project Management", "Technical Writing"],
     cover: "https://drive.google.com/file/d/1ttJvNUjAj6olzF6f5swZGXMEok4MrJgs/view?usp=sharing",
     sections: [
       {
-        heading: "Problem Scope",
-        text: "For my 8-month Capstone project, we worked with a physician to create an accurate, quantifiable way of recording patient’s muscle strengths to track and diagnose neuromuscular disorders, following the Oxford Muscle Scale. The following video highlights the problem scope and contributions of the project, with a brief demo of functionality.",
+        text: "A wearable device that replaces the subjective 0–5 Oxford Scale used in manual muscle-strength testing with objective, reproducible force data. Thin-film force sensors embedded in a glove capture a patient’s isometric strength in real time across six joints, which an onboard microcontroller processes and reports to clinicians in Newtons or kilograms.",
         media: [
           { type: "video", url: "https://drive.google.com/file/d/1bbLFaNKDhLKlz4NbwfqiaK8TCZW0WIVg/view?usp=sharing" }
         ]
       },
       {
-        heading: "Final Prototype",
-        text: "Our solution was to make gloves equipped with FlexiForce force sensors that could ascertain muscle strength based on force applied at the finger and palms of the gloves. All other components, including a custom-built PCB, 3D-printed housing, and batteries, would be comfortably stored in the forearm sleeve. The gloves connected to an interactive UI programmed in Python using the Tkinter library that would serve as a database of patient testing history to view trends over time. The images below show labelled images of the built prototype.",
+        heading: "Hardware & Signal",
+        text: "Force-sensitive resistors (FlexiForce A401) feed a non-inverting op-amp conditioning circuit, read by an ESP32 microcontroller that samples, processes, and wirelessly streams the data over Bluetooth. I designed the custom PCB (EasyEDA, JLCPCB-fabricated) and the 3D-printed finger and palm sensor housings.",
         media: [
           { type: "image", url: "https://drive.google.com/file/d/1LAY2Yfz3ZfD8EHsWT_QfceWrsF8QPyTO/view?usp=sharing", rotate: 90 },
           { type: "image", url: "https://drive.google.com/file/d/1pZfhDSRyjPq5zGO4ZSeJJYazaShOr7Mx/view?usp=sharing", rotate: 90 }
         ]
       },
       {
-        heading: "Poster Presentation",
-        text: "We presented our research to 200+ attendees of the 2025 Capstone Expo, supported by the poster board shown below:",
-        media: [
-          { type: "image", url: "https://drive.google.com/file/d/12GCYL94Wsc7r--jXrxWNgEmL6-QpV6fW/view?usp=sharing", link: "Open full poster ↗" }
-        ]
+        heading: "Software & UI",
+        text: "I built a multi-page Python interface — patient login, live testing, and per-joint historical graphs — designed from a Figma workflow on HCI principles, logging data to CSV at a 10 Hz sample rate."
       },
       {
-        heading: "Capstone Report",
-        text: "This extensive report documents the entire design process from problem definition to solution, with all design inputs and outputs accounted for.",
+        heading: "Outcome",
+        text: "Delivered a working prototype with verified accuracy, wearability, and battery life, presented to 200+ attendees. Named Grad to Watch.",
         media: [
+          { type: "image", url: "https://drive.google.com/file/d/12GCYL94Wsc7r--jXrxWNgEmL6-QpV6fW/view?usp=sharing", caption: "2025 Capstone Expo poster", link: "Open full poster ↗" },
           { type: "pdf", url: "https://drive.google.com/file/d/1S0c6G8e1B4CSPhrEO2dz7o2vp-zb193J/view?usp=sharing", caption: "Capstone report" }
         ]
       }
@@ -375,6 +381,7 @@ const PROJECTS = [
     subtitle: "[McMaster Sumobot Competition](https://www.sumobot.ca/)",
     date: "Sept 2024 – Apr 2025",
     award: "Top 4 in University, Top 8 in Provincials",
+    stack: ["Arduino", "Embedded Systems", "IR Sensors", "Ultrasonic Sensing", "CAD", "3D Printing"],
     summary: "An autonomous, competitive sumobot designed to identify and push other bots out of the ring in under 1 minute.",
     tags: ["Hardware", "CAD", "Python", "Embedded Systems", "Project Design", "Strategic Design"],
     cover: "https://drive.google.com/file/d/1x8HD4vokp5e1qGgzq5rRkKgqa1DfgWT7/view?usp=sharing",
@@ -411,6 +418,7 @@ const PROJECTS = [
     title: "Leader-Follower Robotic System",
     subtitle: "Robotic Science and Systems (course)",
     date: "Sept – Dec 2025",
+    stack: ["PID Control", "Python", "ADC/DAC", "Sensor Calibration", "Signal Processing"],
     summary: "A comparative study of single- vs. dual-emitter infrared sensing for distance tracking in a PID-controlled leader-follower robot system.",
     tags: ["Embedded Systems", "Control Systems (PID)", "Sensor Calibration", "Signal Processing", "Data Analysis", "Robotics", "Scientific Writing"],
     cover: "https://drive.google.com/file/d/1Sd2nxs12P8AIEp_7JMLd_8kE4T7oQBFa/view?usp=sharing",
@@ -448,6 +456,7 @@ const PROJECTS = [
     subtitle: "Microprocessor Systems Project (course)",
     date: "Jan – Apr 2022",
     award: "Grade: A+",
+    stack: ["C", "Python", "I²C", "UART", "ToF Sensor", "3D Visualization"],
     summary: "A portable spatial-mapping device that scans its surroundings with a time-of-flight sensor and reconstructs them as a 3D point cloud.",
     tags: ["Embedded Systems", "C", "Python", "I²C & UART", "Sensor Integration", "3D Visualization", "CAD"],
     sections: [
@@ -485,6 +494,7 @@ const PROJECTS = [
     title: "Motorized Prosthetic Hand",
     subtitle: "McMaster Medical Engineering Design Team (MED-T)",
     date: "Sept 2022 – Apr 2023",
+    stack: ["Python", "EMG", "Digital Filtering (Butterworth)", "Signal Processing", "FFT"],
     summary: "A motorized prosthetic hand driven by forearm muscle activity, where I built the pipeline that turns raw EMG into a clean control signal.",
     tags: ["Signal Processing", "Python", "Biosignals (EMG)", "Digital Filtering", "Data Analysis"],
     cover: "https://drive.google.com/file/d/1lFhrJhPjsEgquyI54kl1tFlVO-bKcSXY/view?usp=sharing",
@@ -682,6 +692,7 @@ function card(item) {
   const meta = [item.subtitle && plain(item.subtitle), item.date].filter(Boolean).join(" · ");
   if (meta) body.appendChild(el("p", "meta", meta));
   if (awards(item)) body.appendChild(awards(item));
+  if (item.stack && item.stack.length) body.appendChild(chips(item.stack));
   if (item.summary) body.appendChild(el("p", "summary", item.summary));
   body.appendChild(el("span", "more", "Details →"));
   b.append(cover, body);
@@ -695,37 +706,6 @@ LEADERSHIP_INTRO.split(/\[\[(.+?)\]\]/).forEach((part, i) => {
   const b = el("span", "badge"); b.innerHTML = TROPHY; b.append(part);
   $("experience-intro").appendChild(b);
 });
-
-/* --- margin decorations --- */
-const SHAPES = {
-  gear: Array.from({ length: 8 }, (_, i) => `<rect x="21" y="4" width="6" height="8" rx="1" transform="rotate(${i * 45} 24 24)"/>`).join("")
-    + '<circle cx="24" cy="24" r="12"/><circle cx="24" cy="24" r="4"/>',
-  wave: '<path d="M3 24Q10 8 17 24T31 24T45 24"/>',
-  resistor: '<path d="M2 24h8l3-8 5 16 5-16 5 16 5-16 3 8h10"/>',
-  atom: '<ellipse cx="24" cy="24" rx="20" ry="7"/><ellipse cx="24" cy="24" rx="20" ry="7" transform="rotate(60 24 24)"/>'
-    + '<ellipse cx="24" cy="24" rx="20" ry="7" transform="rotate(120 24 24)"/><circle cx="24" cy="24" r="2.5" fill="currentColor"/>',
-  benzene: '<path d="M24 6l15.6 9v18L24 42 8.4 33V15z"/><circle cx="24" cy="24" r="9"/>',
-  dna: '<path d="M14 4c0 14 20 14 20 20s-20 6-20 20M34 4c0 14-20 14-20 20s20 6 20 20M18 10h12M18 38h12"/>',
-  circuit: '<path d="M8 40h10l8-8V14h12"/><circle cx="6" cy="40" r="2"/><circle cx="40" cy="14" r="2"/><circle cx="26" cy="32" r="1.5" fill="currentColor"/>',
-  capacitor: '<path d="M4 24h16M28 24h16M20 12v24M28 12v24"/>',
-  opamp: '<path d="M12 8v32l28-16zM4 16h8M4 32h8M40 24h6M16 16h4M18 14v4M16 32h4"/>',
-  integral: '<path d="M30 6c-6-2-8 2-8 8v20c0 6-2 10-8 8"/>'
-};
-// one repeating column of icons per bar: same size, same spacing, colours in a fixed cycle
-const DECO_ORDER = ["gear", "wave", "atom", "resistor", "benzene", "integral", "circuit", "dna", "capacitor", "opamp"];
-const DECO_COLORS = ["#2d4bff", "#14b8a6", "#f26b5b", "#e0a91b"];
-function decoTile(offset) {
-  const W = 52, STEP = 112, SIZE = 26;
-  const icons = DECO_ORDER.map((_, i) => {
-    const shape = DECO_ORDER[(i + offset) % DECO_ORDER.length];
-    const color = DECO_COLORS[(i + offset) % DECO_COLORS.length];
-    return `<g color="${color}" transform="translate(${(W - SIZE) / 2} ${i * STEP + (STEP - SIZE) / 2}) scale(${SIZE / 48})">${SHAPES[shape]}</g>`;
-  }).join("");
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${DECO_ORDER.length * STEP}" fill="none" stroke="currentColor"`
-    + ` stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">${icons}</svg>`;
-  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
-}
-document.querySelectorAll(".deco-icons").forEach((n, i) => { n.style.backgroundImage = decoTile(i * 5); });
 
 /* --- pop-up --- */
 const modal = $("modal");
