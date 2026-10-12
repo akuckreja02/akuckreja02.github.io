@@ -294,12 +294,11 @@ const SITE = {
   tagline: "Engineer: Robotics, Electrical, Biomedical",
   photo: "https://drive.google.com/file/d/18ZTlIPgkbTTcAgv9K_AZyz_0p9VhBaQ5/view?usp=sharing",
   photoPosition: "64% 30%",  // which part of the photo stays visible when cropped (horizontal, vertical)
-  bio: "Hi! I'm Ansh, an engineer looking to make real impact with his work. This website showcases some of my relevant technical projects from previous years, as well as some of my proudest leadership experiences – the stuff a 1-page CV can't fully cover!",
+  bio: "Hi! I'm Ansh, an engineer looking to make real impact with my work. This website showcases some of my relevant technical projects from previous years, as well as some of my proudest leadership experiences – the stuff a 1-page CV can't fully cover!",
   email: "akuckreja02@gmail.com",
   links: [
     { label: "Resume", url: "https://drive.google.com/file/d/1GeuX_jRBVxHS5yuIToptn0hmGg7xhVKB/view?usp=sharing" },
     { label: "LinkedIn", url: "https://www.linkedin.com/in/anshkuckreja/" },
-    { label: "GitHub", url: "https://github.com/akuckreja02" }
   ],
   interests: ["Robotics", "Biomedical engineering", "Systems engineering", "Electrical engineering"],
   skills: {
@@ -316,24 +315,23 @@ const PROJECTS = [
     subtitle: "MSc Dissertation · [Bristol Robotics Laboratory](https://www.bristolroboticslab.com/)",
     date: "Jan – Sept 2026",
     award: "Best Communicated Dissertation 2026",
-    stack: ["ROS2", "Python", "MPC", "SMC", "Control Barrier Functions", "KUKA", "Ultrasound Feedback"],
+    stack: ["ROS2", "Python", "MPC", "SMC", "KUKA", "Ultrasound","Git"],
     summary: "A real-time autonomous needle-steering robot for prostate radiotherapy applications.",
-    tags: ["ROS2", "Python", "Linux", "Git", "KUKA", "Research", "Technical Writing"],
     cover: "https://drive.google.com/file/d/1dPs6cmkKU1_GoVij9eFz93GlLlr8hUO3/view?usp=sharing",
     sections: [
       {
         heading: "Overview",
-        text: "Prostate radiotherapy risks irradiating the nearby rectum, which clinicians mitigate by injecting a SpaceOAR™ hydrogel spacer into the perirectal space to physically shield it — but the manual needle insertion is prone to device-positioning failures. This project developed a robot-assisted needle intervention (RANI) system to perform that insertion autonomously. Unlike prostate biopsy or brachytherapy, the task reaches a single target through a narrow gap, so a misplaced needle is especially costly: it must hit its mark while never puncturing the prostate or rectum. I framed the insertion as a 2D steering problem in the mid-sagittal plane, and the core research contribution was pairing two established control algorithms with Control Barrier Functions (CBFs) for safety-critical obstacle avoidance — a combination not previously implemented for needle steering."
+        text: "Prostate radiotherapy risks irradiating nearby tissues like the rectum, which clinicians mitigate by injecting a SpaceOAR™ hydrogel spacer into the perirectal space as a physical barrier. The current manual needle insertion is prone to device-positioning failures, however, leading to abscesses and bleeding. As such, this project developed a robot-assisted needle intervention (RANI) system to perform that insertion autonomously. Unlike prostate biopsy or brachytherapy, the task reaches a single target through a narrow gap, so a misplaced needle is especially costly: it must hit its mark while never puncturing the prostate or rectum. I framed the insertion as a 2D steering problem in the mid-sagittal plane, and the core research contribution was pairing two established control algorithms with Control Barrier Functions (CBFs) for safety-critical obstacle avoidance — a combination not previously implemented for needle steering."
       },
       {
         heading: "Video",
         media: [
-          { type: "video", url: "https://drive.google.com/file/d/1vPcwTd98-z-6N8gnB6Q3EB4LylGAq8WA/view?usp=sharing", caption: "Video submission" }
+          { type: "video", url: "https://drive.google.com/file/d/1vPcwTd98-z-6N8gnB6Q3EB4LylGAq8WA/view?usp=sharing", caption: "Dissertation video submission" }
         ]
       },
       {
         heading: "Software",
-        text: "The system was built as a modular ROS2 (Humble) workspace in Ubuntu, with each component — path planner, controller, live simulation, and a mock-ultrasound node — running as its own Python node communicating over ROS2 topics and services. This decoupling was a deliberate design choice: it let each subsystem be developed and validated independently, and made it trivial to swap control algorithms or patient anatomies between test cases without touching the rest of the stack. A live Matplotlib window rendered the insertion in real time, modelling the prostate with the Gielis superformula and the rectum as an asymmetric Gaussian to match the lab’s validated anatomical geometry.",
+        text: "The system was built as a modular ROS2 (Humble) workspace in Ubuntu, with each key component (path planner, controller, live simulation, and a mock-ultrasound node) running as its own Python node communicating over ROS2 topics and services. This decoupling was a deliberate design choice, letting each subsystem be developed and validated independently, and making it trivial to swap control algorithms or patient anatomies between test cases without touching the rest of the stack. A live Matplotlib window rendered the insertion in real time, modelling the prostate with the Gielis superformula and the rectum as an asymmetric Gaussian to match the lab’s validated anatomical geometry.",
         media: [
           { type: "image", url: "https://drive.google.com/file/d/1QvZIa1PC0M070KDHTbgN8Q436LcieusJ/view?usp=sharing", caption: "ROS2 workspace architecture" }
         ]
@@ -342,21 +340,22 @@ const PROJECTS = [
         heading: "Hardware",
         text: "The control stack was integrated onto physical hardware: a KUKA LBR iiwa 14 R820 arm driving a clinical 18G 150 mm bevel-tip needle, inserting into a tissue-mimicking phantom (a silicone shell filled with 8% gelatin, with an inflatable silicone hump to represent different anatomies). A BK Medical Flex Focus 500 trans-rectal ultrasound (TRUS) probe provided live visualization of the needle in the mid-sagittal plane, feeding the real-time tip position back to the controller. I wrote the integration layer that converts controller outputs into KUKA-readable commands and streams the ultrasound feed into the control loop.",
         media: [
-          { type: "image", url: "https://drive.google.com/file/d/1Gi8zUkpZkJT3HK8R9MFHdCqPjEHNmq4X/view?usp=sharing" }
+          { type: "image", url: "https://drive.google.com/file/d/1Gi8zUkpZkJT3HK8R9MFHdCqPjEHNmq4X/view?usp=sharing", caption: "RANI system hardware setup" }
         ]
       },
       {
-        heading: "Experiment",
-        text: "A unicycle-model path planner generated a reference trajectory respecting the bevel-tip needle’s curvature limits, keeping the needle at least 1 mm clear of both organs. The two controllers — Sliding-Mode Control (SMC) and Model Predictive Control (MPC), each CBF-enhanced — were tested across three insertion cases spanning a baseline straight path, a realistic shallow-angle insertion through a very narrow gap, and a high-curvature edge case, for 60 trials total (2 algorithms × 3 cases × 10 runs). To make the simulated feedback realistic, the mock ultrasound injected bevel-deflection offset, Gaussian measurement noise, Ornstein-Uhlenbeck drift, and controller latency. Performance was scored on path RMSE, final tip-to-target error, minimum organ clearances, threshold-violation count, and number of needle reorientations.",
+        heading: "Experimental Setup",
+        text: "A unicycle-model path planner generated a reference trajectory respecting the bevel-tip needle’s curvature limits, keeping the needle at least 1mm clear of both organs. The two controllers, Sliding-Mode Control (SMC) and Model Predictive Control (MPC), were enhanced with Control-Barrier Functions (CBF) and tested across three insertion cases, shown below. These 3 cases spanned a baseline straight path, a realistic shallow-angle insertion through a very narrow gap, and a high-curvature edge case, for 60 trials total (2 algorithms × 3 cases × 10 runs). Performance was scored on path RMSE, final tip-to-target error, minimum organ clearances, threshold-violation count, and number of needle reorientations.",
         media: [
-          { type: "image", url: "https://drive.google.com/file/d/1nIMGwFwn4_9qBkL9nmpVFOHEAXpal3B9/view?usp=sharing" }
+          { type: "image", url: "https://drive.google.com/file/d/1nIMGwFwn4_9qBkL9nmpVFOHEAXpal3B9/view?usp=sharing", caption: "Experimental setup" }
         ]
       },
       {
         heading: "Results",
-        text: "Both controllers achieved sub-millimeter targeting with zero safety-margin violations across all 60 trials — the needle tip never came within 1 mm of either organ, confirming the CBF implementation. MPC-CBF was the clearly stronger performer: lower path RMSE, a mean final error as low as 0.090 mm, almost no needle reorientations, and zero failed insertions, whereas SMC failed to reach the target on three occasions and required far more reorientations due to its inherent chattering. MPC-CBF was therefore identified as the more appropriate algorithm for this safety-critical application, at the cost of higher computational effort. Awarded Best Communicated Dissertation 2026.",
+        text: "Both controllers achieved sub-millimeter accuracy with zero safety-margin violations across all 60 trials. As well, the needle tip never came within 1 mm of either organ, confirming the CBF implementation. MPC-CBF was the clearly stronger performer: lower path RMSE, a mean final error as low as 0.090 mm, almost no needle reorientations, and zero failed insertions, whereas SMC failed to reach the target on three occasions and required far more reorientations due to its inherent chattering. MPC-CBF was therefore identified as the more appropriate algorithm for this safety-critical application, at the cost of higher computational effort.",},
+      { heading: "Dissertation Report",
         media: [
-          { type: "pdf", url: "https://drive.google.com/file/d/172BSIv56dFKf0FIgW6fHW8mmRocKr61u/view?usp=sharing", caption: "Full dissertation report" }
+          { type: "pdf", url: "https://drive.google.com/file/d/172BSIv56dFKf0FIgW6fHW8mmRocKr61u/view?usp=sharing", caption: "Dissertation report" }
         ]
       }
     ],
@@ -364,36 +363,35 @@ const PROJECTS = [
   },
   {
     title: "Electronic Myometric Gloves",
-    subtitle: "B.Eng. BME Capstone Project · McMaster University",
+    subtitle: "B.Eng.BME Capstone Project · McMaster University",
     date: "Sept 2024 – Apr 2025",
     award: "Grad to Watch",
-    stack: ["ESP32", "FSR Sensors", "Op-Amp Conditioning", "PCB (EasyEDA)", "Python", "Bluetooth", "3D Printing"],
-    summary: "Designed and built a wearable sensing glove that captures and interprets muscle-force data for physicians during in-clinic muscle testing.",
-    tags: ["Python", "PCB", "Product Design", "Project Management", "Technical Writing"],
+    stack: ["ESP32", "FSR Sensors","PCB (EasyEDA)", "Python", "Bluetooth", "Solidworks", "Figma"],
+    summary: "A wearable sensing glove that captures and interprets muscle-force data during in-clinic muscle testing.",
     cover: "https://drive.google.com/file/d/1ttJvNUjAj6olzF6f5swZGXMEok4MrJgs/view?usp=sharing",
     sections: [
       {
         heading: "Overview",
-        text: "Clinicians assess muscle strength using the Oxford Scale, a manual 0–5 rating applied by pushing against a patient in isometric poses. It’s fast but subjective — scores vary between physicians, and the coarse scale can’t capture the small, meaningful changes in strength that signal whether a condition is progressing. The MyoGlove was designed to replace that judgment call with objective, reproducible data: a wearable glove with embedded thin-film force sensors that measures a patient’s isometric strength across six joints in real time and reports it to the clinician in Newtons or kilograms, all without disrupting the normal flow of an exam.",
+        text: "Clinicians assess muscle strength using the Oxford Scale, a manual 0–5 rating applied by pushing against a patient in isometric poses. While fast, this method lacks consistency and objectivity; scores vary between physicians and the coarse scale can’t capture the small, meaningful changes in strength that signal whether a condition is progressing. The MyoGlove was designed to replace that judgment call with objective, reproducible data: a wearable glove with embedded thin-film force sensors that measures a patient’s isometric strength across six joints in real time and reports it to the clinician in Newtons or kilograms, all without disrupting the normal flow of an exam. This video shows the glove in action (we had some fun with it).",
         media: [
-          { type: "video", url: "https://drive.google.com/file/d/1bbLFaNKDhLKlz4NbwfqiaK8TCZW0WIVg/view?usp=sharing" }
+          { type: "video", url: "https://drive.google.com/file/d/1bbLFaNKDhLKlz4NbwfqiaK8TCZW0WIVg/view?usp=sharing" ,caption: "MyoGlove demonstration video"}
         ]
       },
       {
         heading: "Hardware & Signal Processing",
-        text: "Each measurement point uses a FlexiForce A401 force-sensitive resistor, whose resistance varies with applied force; I ran each sensor through a non-inverting op-amp conditioning circuit to produce a clean, readable voltage, after characterizing the sensor’s force-voltage relationship so readings could be mapped back to true force. The signals are read by an ESP32 microcontroller — chosen for its integrated ADC, onboard processing, and built-in Bluetooth, which let the glove run untethered in a clinical setting. I designed the custom PCB in EasyEDA (fabricated via JLCPCB) to integrate the sensing, conditioning, ESP32, and LiPo power into a single wearable board, and modelled the 3D-printed finger and palm sensor housings, iterating the fixtures across several revisions for fit and repeatable sensor placement.",
+        text: "Each measurement point uses a FlexiForce A401 force-sensitive resistor (FSR). Each sensor was wired-up through a non-inverting op-amp conditioning circuit to produce a clean, readable voltage that mapped voltage to force. The signals are read by an ESP32 microcontroller, chosen for its integrated ADC, onboard processing, and built-in Bluetooth, which let the glove run untethered in a clinical setting. A custom PCB was designed in EasyEDA (fabricated via JLCPCB) to integrate the sensing, conditioning, ESP32, and LiPo power into a single wearable board, and modelled the 3D-printed finger and palm sensor housings, iterating the fixtures across several revisions for fit and repeatable sensor placement.",
         media: [
           { type: "image", url: "https://drive.google.com/file/d/1LAY2Yfz3ZfD8EHsWT_QfceWrsF8QPyTO/view?usp=sharing", rotate: 90 },
-          { type: "image", url: "https://drive.google.com/file/d/1pZfhDSRyjPq5zGO4ZSeJJYazaShOr7Mx/view?usp=sharing", rotate: 90 }
+          { type: "image", url: "https://drive.google.com/file/d/1pZfhDSRyjPq5zGO4ZSeJJYazaShOr7Mx/view?usp=sharing", rotate: 90 ,caption: "Glove assembly sketches" }
         ]
       },
       {
         heading: "Software & Interface",
-        text: "The ESP32 firmware (Arduino IDE, C/C++) samples the conditioned signals at 10 Hz, processes them, and streams results wirelessly over Bluetooth to a companion application. I built that multi-page Python interface for clinicians end to end: patient login, patient details, test selection, a live testing screen, per-joint historical graphs, and a test-summary/retest flow — all designed from a Figma workflow on human-computer-interaction principles, with high-contrast readouts for at-a-glance readability during an exam. Each patient’s results are logged to CSV so strength can be tracked across sessions."
+        text: "The ESP32 firmware (Arduino IDE, C/C++) samples the conditioned signals at 10 Hz, processes them, and streams results wirelessly over Bluetooth to a companion application. I built a multi-page Python interface for clinicians end to end: patient login, patient details, test selection, a live testing screen, per-joint historical graphs, and a test-summary/retest flow. All screens were first designed on a Figma workflow using HCI principles. Each patient’s results are logged to CSV so strength can be tracked across sessions."
       },
       {
         heading: "Design Verification & Outcome",
-        text: "Because this was a medical device, the project followed a formal design-controls process — tracing user needs to design inputs and outputs, running an FMEA risk assessment, and building verification plans against functional, performance, interface, and physical requirements. I helped verify the system experimentally, including an accuracy check against a reference scale (force vs. ADC calibration), plus battery-life, wearability, and UI-readability tests. The result was a working, validated prototype, presented to 200+ attendees. Named Grad to Watch.",
+        text: "Because this was a medical device, the project followed a formal design-controls process: tracing user needs to design inputs and outputs, running an FMEA risk assessment, and building verification plans against functional, performance, interface, and physical requirements. I helped verify the system experimentally, including an accuracy check against a reference scale (force vs. ADC calibration), as well as battery-life, wearability, and UI-readability tests. The result was a working, validated prototype, presented to 200+ attendees at the annual McMaster EngineeringCapstone Expo.",
         media: [
           { type: "image", url: "https://drive.google.com/file/d/12GCYL94Wsc7r--jXrxWNgEmL6-QpV6fW/view?usp=sharing", caption: "2025 Capstone Expo poster", link: "Open full poster ↗" },
           { type: "pdf", url: "https://drive.google.com/file/d/1S0c6G8e1B4CSPhrEO2dz7o2vp-zb193J/view?usp=sharing", caption: "Capstone report" }
@@ -407,34 +405,33 @@ const PROJECTS = [
     subtitle: "[McMaster Sumobot Competition](https://www.sumobot.ca/)",
     date: "Sept 2024 – Apr 2025",
     award: "Top 4 in University, Top 8 in Provincials",
-    stack: ["Arduino", "Embedded Systems", "IR Sensors", "Ultrasonic Sensing", "CAD", "3D Printing"],
-    summary: "An autonomous, competitive sumobot designed to identify and push other bots out of the ring in under 1 minute.",
-    tags: ["Hardware", "CAD", "Python", "Embedded Systems", "Project Design", "Strategic Design"],
+    stack: ["Arduino", "Autodesk Inventor", "Python","Embedded Systems", "Sensors"],
+    summary: "An autonomous, competitive sumobot designed to identify and push other bots out of the ring.",
     cover: "https://drive.google.com/file/d/1x8HD4vokp5e1qGgzq5rRkKgqa1DfgWT7/view?usp=sharing",
     sections: [
-      {
-        text: "An autonomous combat robot for the McMaster Sumobot Competition, where fully-autonomous robots face off one-on-one in a ring with one minute to push each other out, under a strict 10 cm × 10 cm footprint and 500 g weight limit. Top 4 in University, Top 8 in Provincials."
+      {heading: "Overview",
+        text: "An autonomous combat robot for the McMaster Sumobot Competition, where fully-autonomous robots face off one-on-one in a ring with 1 minute to push each other out, under a strict 10×10 cm footprint and 500g weight limit. Our bot finished Top 4 in the University competition and subsequently Top 8 in Provincials."
       },
       {
         heading: "Strategy",
-        text: "We built the design around a low centre-of-gravity and fast sensor polling to run a proactive “global search” — the bot sweeps the ring hunting for an opponent rather than waiting to react. A wedged “skirt” along the leading edge scoops opponents up for leverage while denying them the same, and weighting the chassis to the full 500 g limit with packed coins made it far harder to shove. Each of these was a deliberate response to the competition’s physics: with a fixed weight cap and a tiny footprint, offense came from geometry and ballast rather than brute size.",
+        text: "We built the design around a low centre-of-gravity and fast sensor polling to run a proactive “global search”, where the bot sweeps the ring hunting for an opponent to push out. A wedged “skirt” along the bot's edge scoops opponents up for leverage while denying them the same, and weighting the chassis to the full 500g limit made it far harder to shove out. The following videos show some examples of the bot in action.",
         media: [
-          { type: "video", url: "https://drive.google.com/file/d/1LhmIECRRHSK9SymXpvE2y92HuAdvdtAF/view?usp=sharing", caption: "Match footage" },
-          { type: "video", url: "https://drive.google.com/file/d/1Ltz2LMkvNsOHgK--4uMg2dIRd8N8cfRg/view?usp=sharing" }
+          { type: "video", url: "https://drive.google.com/file/d/1LhmIECRRHSK9SymXpvE2y92HuAdvdtAF/view?usp=sharing" },
+          { type: "video", url: "https://drive.google.com/file/d/1Ltz2LMkvNsOHgK--4uMg2dIRd8N8cfRg/view?usp=sharing", caption: "Match footage"}
         ]
       },
       {
         heading: "Hardware",
-        text: "An Arduino Nano powers and coordinates the whole system — two downward-facing IR sensors detect the white ring border to stay in-bounds, and a front-mounted ultrasonic sensor locates the opposing robot to drive the search-and-push behaviour. The electrical design was constrained by the weight and size limits, so component selection prioritized a single compact controller that could power everything.",
+        text: "An Arduino Nano powers and coordinates the whole system, 2 downward-facing IR sensors on the front corners detect the white ring border to stay in-bounds, and a front-mounted ultrasonic sensor locates the opposing robot to drive the search-and-push behaviour. The electrical design was constrained by the weight and size limits, so component selection prioritized a single compact controller that could power everything.",
         media: [
-          { type: "image", url: "https://drive.google.com/file/d/1dqQDs29JoPU_jLvAZK07F-65Q2qh7LLd/view?usp=sharing" }
+          { type: "image", url: "https://drive.google.com/file/d/1dqQDs29JoPU_jLvAZK07F-65Q2qh7LLd/view?usp=sharing" , caption: "Electrical schematic" }
         ]
       },
       {
-        heading: "CAD",
-        text: "The central challenge was packaging — fitting every component and its wiring inside the 10 cm × 10 cm envelope while keeping the centre of gravity low for pushing power. The final chassis was modelled and 3D printed after several iterations refining the internal layout.",
+        heading: "3D Modelling & Packaging",
+        text: "The central challenge was packaging every component (and its wiring) inside the 10x10cm restrictions while keeping the centre of gravity low for pushing power. The final chassis was modelled in Autodesk Inventor and 3D printed after several iterations refining the internal layout.",
         media: [
-          { type: "image", url: "https://drive.google.com/file/d/1ymDUI5XX7ilMK47hsHjIJ-byk5v20PA-/view?usp=sharing", caption: "CAD design" }
+          { type: "image", url: "https://drive.google.com/file/d/1ymDUI5XX7ilMK47hsHjIJ-byk5v20PA-/view?usp=sharing", caption: "Final CAD design" }
         ]
       }
     ],
@@ -446,31 +443,31 @@ const PROJECTS = [
     date: "Sept – Dec 2025",
     stack: ["PID Control", "Python", "ADC/DAC", "Sensor Calibration", "Signal Processing"],
     summary: "A comparative study of single- vs. dual-emitter infrared sensing for distance tracking in a PID-controlled leader-follower robot system.",
-    tags: ["Embedded Systems", "Control Systems (PID)", "Sensor Calibration", "Signal Processing", "Data Analysis", "Robotics", "Scientific Writing"],
     cover: "https://drive.google.com/file/d/1Sd2nxs12P8AIEp_7JMLd_8kE4T7oQBFa/view?usp=sharing",
     sections: [
-      {
-        text: "A comparative study testing whether cheap infrared sensing can replace expensive LiDAR/vision/ultrasonic hardware for distance tracking in a leader-follower robot pair (two Pololu 3Pi+ 32U4 robots). We compared a single-emission setup (only the leader emits IR) against a dual-emission one (both emit, to filter noise), hypothesizing dual would be more robust — the results proved the opposite.",
+      {heading:"Overview",
+        text: "Course project of the MSc Robotics course 'Robotics Science and Systems'. A comparative study testing whether cheap infrared (IR) sensing can replace expensive LiDAR/vision/ultrasonic hardware for distance tracking in a leader-follower robot pair (two Pololu 3Pi+ 32U4 robots). We compared a single-emission setup (only the leader emits IR) against a dual-emission one (both emit, to filter noise), hypothesizing dual would be more robust.",
         media: [
-          { type: "image", url: "https://drive.google.com/file/d/1iDoZ9xxXfxfwIWMndVLwbXzb8FbY2o2A/view?usp=sharing" }
+          { type: "image", url: "https://drive.google.com/file/d/1iDoZ9xxXfxfwIWMndVLwbXzb8FbY2o2A/view?usp=sharing", caption: "Leader-follower IR setup" }
         ]
       },
       {
         heading: "Sensing & Calibration",
-        text: "The 3Pi+ reads IR through two channels — a 10-bit analog (ADC) channel and a digital channel that times a capacitor discharge. We calibrated both against true distance and selected the analog channel for its lower noise and more linear response, placing the control setpoint (~25 mm) in its most linear region so distance could be modelled with a clean linear fit."
+        text: "The 3Pi+ reads IR through 2 channels: a 10-bit analog (ADC) channel and a digital channel that times a capacitor discharge. We calibrated both against true distance and selected the analog channel for its lower noise and more linear response, placing the control setpoint (~25 mm) in its most linear region so distance could be modelled with a clean linear fit."
       },
       {
         heading: "Control",
-        text: "The follower runs a nested PID architecture — a distance controller sets base velocity, a heading controller holds orientation, and left/right wheel controllers synchronize the motors. To make the control transferable between two physically non-identical robots, we calibrated each one’s wheel separation and radius, then tuned each loop empirically."
+        text: "The follower runs a nested PID architecture where a distance controller sets base velocity, a heading controller holds orientation, and left/right wheel controllers synchronize the motors. To make the control transferable between two physically non-identical robots, we calibrated each one’s wheel separation and radius, then tuned each loop empirically."
       },
       {
         heading: "Experiment & Results",
-        text: "Crossing two emission modes with three motion patterns (constant, start-stop, forward-back), ten runs each, gave 60 trials, scored by integral absolute error (IAE). Single-emission consistently produced lower error and more stable control: dual-emission raised the baseline illumination, saturating the sensors early and compressing their usable range. The takeaway — for small robots with limited hardware, minimal IR emission tracks distance more dependably than a more complex dual-source design."
+        text: "Crossing two emission modes with three motion patterns (constant, start-stop, forward-back), ten runs each, gave 60 trials, scored by integral absolute error (IAE). Single-emission consistently produced lower error and more stable control: dual-emission raised the baseline illumination, saturating the sensors early and compressing their usable range. The takeaway was that for small robots with limited hardware, minimal IR emission tracks distance more dependably than a more complex dual-source design."
       },
       {
         heading: "Report",
+        text: "A professional, conference-style report was produced for the course, including a literature review, experimental design, and results discussion.",
         media: [
-          { type: "pdf", url: "https://drive.google.com/file/d/1jvAatO4Tai_snKUVM5X4d-uUdC_vWoPN/view?usp=sharing", caption: "Paper" }
+          { type: "pdf", url: "https://drive.google.com/file/d/1jvAatO4Tai_snKUVM5X4d-uUdC_vWoPN/view?usp=sharing", caption: "Project Report" }
         ]
       }
     ],
@@ -482,29 +479,33 @@ const PROJECTS = [
     date: "Jan – Apr 2022",
     award: "Grade: A+",
     stack: ["C", "Python", "I²C", "UART", "ToF Sensor", "3D Visualization"],
-    summary: "A portable spatial-mapping device that scans its surroundings with a time-of-flight sensor and reconstructs them as a 3D point cloud.",
-    tags: ["Embedded Systems", "C", "Python", "I²C & UART", "Sensor Integration", "3D Visualization", "CAD"],
+    summary: "A portable spatial-mapping device that scans and reconstructs its 3D surroundings.",
+    cover: "https://drive.google.com/file/d/10wpkSv9zVfdhCtCElrzm88cmAepqexcn/view?usp=sharing",
     sections: [
-      {
-        text: "A portable, LiDAR-style spatial scanner that maps a hallway in 3D, built on a TI MSP-EXP432E401Y microcontroller. Grade: A+."
-      },
-      {
-        heading: "Hardware & Sensing",
-        text: "A VL53L0X time-of-flight sensor (940 nm laser, 4 m range) is mounted on a stepper motor via a custom 3D-printed bracket and driven over I²C. On each button press the motor sweeps a full rotation, pausing every 11.25° (36 readings/revolution) to measure distance to the nearest surface by timing an IR pulse’s round trip (d = c·t / 2).",
+      { heading:"Overview",
+        text: "Course project for B.Eng COMPENG 2DX3: 'Microprocessor Design Project'. I created a portable, LiDAR-style spatial scanner that maps a hallway in 3D, built on a TI MSP-EXP432E401Y microcontroller. The device uses a time-of-flight sensor mounted on a stepper motor to sweep the environment, collecting distance readings that are streamed to a PC for 3D reconstruction.",
         media: [
           { type: "image", url: "https://drive.google.com/file/d/10wpkSv9zVfdhCtCElrzm88cmAepqexcn/view?usp=sharing", caption: "Device setup" }
         ]
       },
       {
+        heading: "Hardware & Sensing",
+        text: "A VL53L0X time-of-flight sensor (940nm laser, 4m range) is mounted on a stepper motor via a custom 3D-printed bracket and driven over I²C. On each button press the motor sweeps a full rotation, pausing every 11.25° (36 readings/revolution) to measure distance to the nearest surface by timing an IR pulse’s round trip.",
+        
+      },
+      {
         heading: "Firmware & Acquisition",
-        text: "Firmware written in C (flashed via Keil µVision) boots the sensor over I²C, steps the motor, triggers each ranging measurement, and streams readings to a PC over UART at 115200 baud — 160 points per scan, with a fast reverse rotation between revolutions to prevent wire tangling as the device is advanced down the hallway.",
+        text: "Firmware written in C (flashed via Keil µVision) boots the sensor over I²C, steps the motor, triggers each ranging measurement, and streams readings to a PC over UART at 115200 baud. This equates to 160 points per scan, with a fast reverse rotation between revolutions to prevent wire tangling as the device is advanced down the hallway. The video below shows a clip of the device in action.",
         media: [
           { type: "video", url: "https://drive.google.com/file/d/1CM3Itgc0AjKyjn7UVOLWTmyb2hmGNCXE/view?usp=sharing", caption: "Demo" }
         ]
       },
       {
         heading: "Processing & Reconstruction",
-        text: "A Python program reads the UART stream with pyserial and converts each reading into a 3D coordinate — treating the distance as the hypotenuse and the motor angle as the known angle, so trigonometry yields y and z while x tracks forward progress — then renders the full point cloud in 3D with matplotlib’s Axes3D."
+        text: "A Python program reads the UART stream with pyserial and converts each reading into a 3D coordinate. By treating the distance as the hypotenuse and the motor angle as the known angle, trigonometry yields y and z while x tracks forward progress. The full point cloud could then be plotted in 3D with matplotlib’s Axes3D library. The image below shows an example reconstructions in a hallway. ",
+        media:[
+          { type: "image", url: "https://drive.google.com/file/d/1tpqtaWW9vK9--Q1x-Ml9BSc4knUk8opT/view?usp=sharing", caption: "Example reconstruction" }
+        ]
       },
       {
         heading: "Report",
@@ -519,35 +520,32 @@ const PROJECTS = [
     title: "Motorized Prosthetic Hand",
     subtitle: "McMaster Medical Engineering Design Team (MED-T)",
     date: "Sept 2022 – Apr 2023",
-    stack: ["Python", "EMG", "Digital Filtering (Butterworth)", "Signal Processing", "FFT"],
-    summary: "A motorized prosthetic hand driven by forearm muscle activity, where I built the pipeline that turns raw EMG into a clean control signal.",
-    tags: ["Signal Processing", "Python", "Biosignals (EMG)", "Digital Filtering", "Data Analysis"],
+    stack: ["Python", "EMG", "Filters", "Signal Processing", "FFT"],
+    summary: "The filtering pipeline for a motorized prosthetic hand driven by forearm muscle activity.",
     cover: "https://drive.google.com/file/d/1lFhrJhPjsEgquyI54kl1tFlVO-bKcSXY/view?usp=sharing",
     sections: [
-      {
-        text: "A motorized prosthetic hand driven by the wearer’s own forearm muscle activity, built by McMaster’s Medical Engineering Design Team. I owned the signal-processing side — the pipeline that turns raw, noisy EMG into a clean control signal the hand can act on.",
+      {heading: "Overview",
+        text: "As a member of the software subteam of McMaster's Medical Engineering Design Team, I worked on a project to build a motorized prosthetic hand driven byforearm muscle activity. I owned the signal-processing pipeline that turns raw, noisy EMG into a clean control signal the hand can act on, and wrote an extensive guide for future members to build upon",
         media: [
           { type: "video", url: "https://drive.google.com/file/d/1Ns2-RKEFF8uo-azf6aX85ydcji3HiokD/view?usp=sharing", caption: "Collecting EMG forearm data" }
         ]
       },
       {
         heading: "Signal Pipeline",
-        text: "Starting from a MyoWare sensor’s differential output (which rejects common-mode noise), the pipeline removes the DC offset from electrode half-cell potentials, then applies an 8th-order Butterworth bandpass (~10–400 Hz) to strip low-frequency drift and sweat artifacts along with high-frequency noise. A 60 Hz notch filter handles mains interference when a spectral peak is present. The signal is then full-wave rectified and passed through a low-cutoff (3 Hz) Butterworth lowpass to extract the linear envelope — the smooth amplitude trace the hand uses to decide when and how to actuate."
+        text: "Starting from a MyoWare sensor’s differential output (which rejects common-mode noise), the pipeline removes the DC offset from electrode half-cell potentials and applies an 8th-order Butterworth bandpass (~10–400 Hz) to strip low-frequency drift, sweat artifacts, and high-frequency noise. A 60-Hz notch filter handles mains interference when a spectral peak is present. The signal is then full-wave rectified and passed through a low-cutoff (3 Hz) Butterworth lowpass to extract the linear envelope - the smooth amplitude trace the hand uses to decide when and how to actuate. I implemented and validated the pipeline in Python, using time-domain and FFT views to tune filter cutoffs against real recordings"
       },
       {
-        heading: "Implementation",
-        text: "I implemented and validated the pipeline in Python, using time-domain and FFT views to tune filter cutoffs against real recordings and verify noise sources (e.g., confirming when the 60 Hz notch could be skipped). I chose Butterworth filters for their flat passband and documented the full process as a guide for the software sub-team to build on.",
+        heading: "Documentation",
         media: [
           { type: "pdf", url: "https://docs.google.com/document/d/17GQfiK8Mi8lVD5p3hvJ5owsHCLwbuF_1KxIGaQchMDc/edit?usp=sharing", caption: "EMG filtering guide" }
         ]
       }
     ],
-    links: [{ label: "MED-T", url: "https://www.macmed-t.com/" }]
   }
 ];
 
 // Shown under the Leadership heading. Text in [[double brackets]] becomes a gold award badge.
-const LEADERSHIP_INTRO = "I've always strived to go above and beyond in any community I'm in. All my extracurricular endeavours won me the [[2025 Graduate Leadership Award]] and named a [[2025 Grad to Watch]]. Below are two of the organizations I dedicated a significant amount of time to in my undergraduate career. Other leadership involvements include 5 years as an undergraduate Teaching Assistant, iBioMed mentor, peer tutor, and student ambassador.";
+const LEADERSHIP_INTRO = "I've always strived to go above and beyond in any community I'm in. All my extracurricular endeavours won me the [[2025 Graduate Leadership Award]] and named me a [[2025 Grad to Watch]]. Below are two of the organizations I dedicated a significant amount of time to in my undergraduate career.";
 
 // Compact text list under the leadership cards (no images): role, org, years (optional), one line.
 const ADDITIONAL_INVOLVEMENT = [
@@ -560,13 +558,27 @@ const ADDITIONAL_INVOLVEMENT = [
   {
     role: "iBioMed Peer Mentor",
     org: "McMaster University",
-    text: "Guided junior students through the integrated biomedical engineering program."
+    years: "2020–2025",
+    text: "Guided junior students through the integrated biomedical engineering program and offered advice and support."
   },
   {
-    role: "Peer Tutor & Student Ambassador",
+    role: "Student Ambassador",
     org: "McMaster University",
-    text: "Tutored engineering coursework and represented the program to prospective students."
-  }
+    years: "2020–2025",
+    text: "Gave campus tours andrepresented the program to prospective students at open days."
+  },
+  {
+    role: "Youth Volunteer",
+    org: "Ekal Vidyalaya Foundation of Canada",
+    years: "2017-2021",
+    text: "Held events and ran private tutoring sessions to support underprivileged school children in India."
+  },
+  {
+    role: "Note Taker",
+    years:"2019-2020",
+    org: "McMaster University Student Accessibility Services (SAS)",
+    text: "Took detailed and coherent handwritten notes in Engineering lectures for students with disabilities to use as study resources"
+  },
 ];
 
 const EXPERIENCE = [
@@ -578,11 +590,11 @@ const EXPERIENCE = [
     tags: [],
     details: [
       "Lead Planner (2023 – 2024) · Planning Committee Member (2021 – 2023) · Representative (2020 – 2021)",
-      "One of the largest leadership roles available to undergraduate students, I spent over 25 hours/week developing the logistics of 15+ events for 1700 first-year students. I worked closely with Faculty members and directly led a team of 14 committee members and 160 student representatives. In addition to managing a $100,000 budget and ensuring all logistics were accounted for, this role taught me so much about leading people and what it truly meant to represent McMaster Engineering."
+      "One of the largest leadership roles available to undergraduate students, I spent over 25 hours/week developing the logistics of 15+ events for 1700 first-year students. I worked closely with Faculty members and directly led a team of 14 committee members and 160 student representatives. In addition to managing a $100,000 budget and ensuring all logistics were accounted for, this role taught me so much about leading people and what it truly meant to represent McMaster Engineering. It is one I'll carry with me for the rest of my life."
     ],
     cover: "https://drive.google.com/file/d/1RYM5uLwje6wHCh78FMPaZB3_ovUVTiVf/view?usp=sharing",
     media: [
-      { type: "image", url: "https://drive.google.com/file/d/1-9G1OUAb2iG151lMcv9TPWdCFImIs8IA/view?usp=sharing" }
+      { type: "image", url: "https://drive.google.com/file/d/1-9G1OUAb2iG151lMcv9TPWdCFImIs8IA/view?usp=sharing" , caption: "Engineering Welcome Week Team 2024" }
     ],
     links: []
   },
@@ -593,12 +605,11 @@ const EXPERIENCE = [
     summary: "Worked to enhance the academic and social experiences of over 800 iBioMed students, acting as the link between students, professors and program directors.",
     tags: [],
     details: [
-      "As co-president, I dedicated several hours per week to enhancing the academic and social experiences of over 800 iBioMed students. I chaired weekly Society meetings, helped organize social events for iBioMed students, relayed course feedback between students from all years and professors, and led monthly meetings with the program directors.",
-      "This was a leadership experience that allowed me to have a direct impact on the iBioMed community, both from a student perspective (through heeding course feedback and social events), and from a Faculty perspective (letting Faculty and Co-directors know how students are feeling, and giving them feedback on ideas they have for administrative changes)."
+      "As co-president, I dedicated several hours per week to enhancing the academic and social experiences of over 800 iBioMed students. I chaired weekly Society meetings, helped organize social events for iBioMed students, relayed course feedback between students from all years and professors, and led monthly meetings with the program directors. This was a leadership experience that allowed me to have a direct impact on the iBioMed community, both from a student perspective (through heeding course feedback and social events), and from a Faculty perspective (letting Faculty and Co-directors know how students are feeling, and giving them feedback on ideas they have for administrative changes)."
     ],
     cover: "https://drive.google.com/file/d/1hU5N3KmvFjKos1nTCPox3-XUDZhi1qkL/view?usp=sharing",
     media: [
-      { type: "image", url: "https://drive.google.com/file/d/1gvYLnqMkDVD6KgAKW9004HbCRs42o4-i/view?usp=sharing" }
+      { type: "image", url: "https://drive.google.com/file/d/1jpHZByJaFJRny3tSQg5jIFQ_gQR8CFYt/view?usp=sharing" , caption: "iBioMed Society Holiday Event 2021" }
     ],
     links: []
   }
