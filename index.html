@@ -246,15 +246,15 @@
 
   <main>
     <section class="block" id="projects">
-      <h2 class="section-title">Technical projects</h2>
+      <h2 class="section-title">Technical Projects</h2>
       <div class="grid three" id="project-grid"></div>
     </section>
     <section class="block" id="experience">
-      <h2 class="section-title">Leadership &amp; volunteering</h2>
+      <h2 class="section-title">Leadership &amp; Volunteering</h2>
       <p class="section-intro" id="experience-intro"></p>
       <div class="grid" id="experience-grid"></div>
       <div class="involvement">
-        <h3>Additional involvement</h3>
+        <h3>Additional Involvement</h3>
         <ul id="involvement"></ul>
       </div>
     </section>
@@ -315,7 +315,7 @@ const PROJECTS = [
     subtitle: "MSc Dissertation · [Bristol Robotics Laboratory](https://www.bristolroboticslab.com/)",
     date: "Jan – Sept 2026",
     award: "Best Communicated Dissertation 2026",
-    stack: ["ROS2", "Python", "MPC", "SMC", "KUKA", "Ultrasound","Git"],
+    stack: ["ROS2", "Python", "MPC", "SMC", "CBF", "KUKA", "Ultrasound","Git"],
     summary: "A real-time autonomous needle-steering robot for prostate radiotherapy applications.",
     cover: "https://drive.google.com/file/d/1dPs6cmkKU1_GoVij9eFz93GlLlr8hUO3/view?usp=sharing",
     sections: [
@@ -344,10 +344,10 @@ const PROJECTS = [
         ]
       },
       {
-        heading: "Experimental Setup",
+        heading: "Experiment Design",
         text: "A unicycle-model path planner generated a reference trajectory respecting the bevel-tip needle’s curvature limits, keeping the needle at least 1mm clear of both organs. The two controllers, Sliding-Mode Control (SMC) and Model Predictive Control (MPC), were enhanced with Control-Barrier Functions (CBF) and tested across three insertion cases, shown below. These 3 cases spanned a baseline straight path, a realistic shallow-angle insertion through a very narrow gap, and a high-curvature edge case, for 60 trials total (2 algorithms × 3 cases × 10 runs). Performance was scored on path RMSE, final tip-to-target error, minimum organ clearances, threshold-violation count, and number of needle reorientations.",
         media: [
-          { type: "image", url: "https://drive.google.com/file/d/1nIMGwFwn4_9qBkL9nmpVFOHEAXpal3B9/view?usp=sharing", caption: "Experimental setup" }
+          { type: "image", url: "https://drive.google.com/file/d/1nIMGwFwn4_9qBkL9nmpVFOHEAXpal3B9/view?usp=sharing", caption: "Test cases across both algorithms" }
         ]
       },
       {
@@ -366,7 +366,7 @@ const PROJECTS = [
     subtitle: "B.Eng.BME Capstone Project · McMaster University",
     date: "Sept 2024 – Apr 2025",
     award: "Grad to Watch",
-    stack: ["ESP32", "FSR Sensors","PCB (EasyEDA)", "Python", "Bluetooth", "Solidworks", "Figma"],
+    stack: ["ESP32", "FSR Sensors","PCB", "Python", "Bluetooth", "Autodesk Inventor", "Figma"],
     summary: "A wearable sensing glove that captures and interprets muscle-force data during in-clinic muscle testing.",
     cover: "https://drive.google.com/file/d/1ttJvNUjAj6olzF6f5swZGXMEok4MrJgs/view?usp=sharing",
     sections: [
@@ -405,7 +405,7 @@ const PROJECTS = [
     subtitle: "[McMaster Sumobot Competition](https://www.sumobot.ca/)",
     date: "Sept 2024 – Apr 2025",
     award: "Top 4 in University, Top 8 in Provincials",
-    stack: ["Arduino", "Autodesk Inventor", "Python","Embedded Systems", "Sensors"],
+    stack: ["Arduino", "Autodesk Inventor", "Python","Embedded Systems", "Sensors (IR, US)"],
     summary: "An autonomous, competitive sumobot designed to identify and push other bots out of the ring.",
     cover: "https://drive.google.com/file/d/1x8HD4vokp5e1qGgzq5rRkKgqa1DfgWT7/view?usp=sharing",
     sections: [
@@ -518,9 +518,9 @@ const PROJECTS = [
   },
   {
     title: "Motorized Prosthetic Hand",
-    subtitle: "McMaster Medical Engineering Design Team (MED-T)",
+    subtitle: "[McMaster Medical Engineering Design Team (MED-T)](https://www.macmed-t.com/)",
     date: "Sept 2022 – Apr 2023",
-    stack: ["Python", "EMG", "Filters", "Signal Processing", "FFT"],
+    stack: ["Python", "EMG", "Digital Filters", "Signal Processing", "FFT"],
     summary: "The filtering pipeline for a motorized prosthetic hand driven by forearm muscle activity.",
     cover: "https://drive.google.com/file/d/1lFhrJhPjsEgquyI54kl1tFlVO-bKcSXY/view?usp=sharing",
     sections: [
@@ -565,7 +565,7 @@ const ADDITIONAL_INVOLVEMENT = [
     role: "Student Ambassador",
     org: "McMaster University",
     years: "2020–2025",
-    text: "Gave campus tours andrepresented the program to prospective students at open days."
+    text: "Gave campus tours and represented the program to prospective students at open days."
   },
   {
     role: "Youth Volunteer",
@@ -583,8 +583,8 @@ const ADDITIONAL_INVOLVEMENT = [
 
 const EXPERIENCE = [
   {
-    title: "Engineering Welcome Week",
-    subtitle: "Lead Planner · McMaster Engineering",
+    title: "McMaster Engineering Welcome Week",
+    subtitle: "Lead Planner",
     date: "2020 – 2024",
     summary: "Led the logistics of 15+ events for 1,700 first-year students, directing a team of 14 committee members and 160 student representatives.",
     tags: [],
